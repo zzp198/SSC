@@ -1,0 +1,9 @@
+displayName = SSC - Server Side Character
+author = zzp198
+version = 2023.4.0
+dllReferences = 
+modReferences = 
+weakReferences = 
+homepage = https://steamcommunity.com/sharedfiles/filedetails/?id=XXX
+buildIgnore = 
+side = Both
