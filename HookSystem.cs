@@ -25,52 +25,21 @@ public class HookSystem : ModSystem
         IL_NetMessage.SendData += IgnoreGameMode;
         IL_MessageBuffer.GetData += SSCInit;
         IL_Main.DrawInterface += HideLayerBySSC;
-        On_Player.InternalSavePlayerFile += SSCSave;
+        IL_Main.DoUpdate_AutoSave += FixAutoSaveTime;
         On_FileUtilities.Exists += ExistByPass;
         On_FileUtilities.ReadAllBytes += ReadByPass;
-        IL_Main.DoUpdate_AutoSave += FixAutoSaveTime;
-    }
-
-    // 缩短自动保存的间隔
-    void FixAutoSaveTime(ILContext il)
-    {
-        var cur = new ILCursor(il);
-        cur.GotoNext(MoveType.After, i => i.MatchLdcI4(300000));
-        cur.EmitDelegate<Func<long, long>>(_ => 60000);
-    }
-
-    // 原本的path后缀为plr或tplr,根据后缀在特定格式的数据中返回内容
-    byte[] ReadByPass(On_FileUtilities.orig_ReadAllBytes func, string path, bool cloud)
-    {
-        if (path.StartsWith("SSC@"))
-        {
-            var regex = new Regex(@"^SSC@(?<plr>[0-9A-F]+)@(?<tplr>[0-9A-F]+)@\.(?<type>plr|tplr)$");
-            var match = regex.Match(path);
-            if (match.Success)
-            {
-                return Convert.FromHexString(match.Groups[match.Groups["type"].Value].Value);
-            }
-
-            throw new ArgumentException("Regex match failed.");
-        }
-
-        return func(path, cloud);
-    }
-
-    // 放行特定的数据格式
-    bool ExistByPass(On_FileUtilities.orig_Exists func, string path, bool cloud)
-    {
-        return path.StartsWith("SSC@") || func(path, cloud);
+        On_Player.InternalSavePlayerFile += SSCSave;
+        On_Player.KillMeForGood += GoodKill;
     }
 
     // 在客户端进行多人模式连接时,服务端会额外发送自己的GameMode给客户端
-    // case 3:
-    //    writer.Write((byte) remoteClient);
-    //    writer.Write(false);
-    // -> writer.Write((byte) Main.GameMode)
-    //    break;
     void IgnoreGameMode(ILContext il)
     {
+        // case 3:
+        //    writer.Write((byte) remoteClient);
+        //    writer.Write(false);
+        // -> writer.Write((byte) Main.GameMode)
+        //    break;
         var cur = new ILCursor(il);
         cur.GotoNext(MoveType.After,
             i => i.MatchLdloc(3), i => i.MatchLdarg(1), i => i.MatchConvU1(),
@@ -83,13 +52,13 @@ public class HookSystem : ModSystem
     }
 
     // 客户端处理额外的GameMode,以此初始化所有配置,并以无毒无公害的永久幽魂形式进入世界
-    //    if (Netplay.Connection.State == 1)
-    //        Netplay.Connection.State = 2;
-    //    int index1 = (int) this.reader.ReadByte();
-    //    bool flag1 = this.reader.ReadBoolean();
-    // -> byte gameMode = this.reader.ReadByte();
     void SSCInit(ILContext il)
     {
+        //    if (Netplay.Connection.State == 1)
+        //        Netplay.Connection.State = 2;
+        //    int index1 = (int) this.reader.ReadByte();
+        //    bool flag1 = this.reader.ReadBoolean();
+        // -> byte gameMode = this.reader.ReadByte();
         var cur = new ILCursor(il);
         cur.GotoNext(MoveType.After,
             i => i.MatchLdarg(0),
@@ -153,12 +122,44 @@ public class HookSystem : ModSystem
         });
     }
 
+    // 缩短自动保存的间隔为60秒
+    void FixAutoSaveTime(ILContext il)
+    {
+        var cur = new ILCursor(il);
+        cur.GotoNext(MoveType.After, i => i.MatchLdcI4(300000));
+        cur.EmitDelegate<Func<long, long>>(_ => 60000);
+    }
+
+    // 放行特定的数据格式
+    bool ExistByPass(On_FileUtilities.orig_Exists func, string path, bool cloud)
+    {
+        return path.StartsWith("SSC@") || func(path, cloud);
+    }
+
+    // 原本的path后缀为plr或tplr,根据后缀在特定格式的数据中返回内容
+    byte[] ReadByPass(On_FileUtilities.orig_ReadAllBytes func, string path, bool cloud)
+    {
+        if (path.StartsWith("SSC@"))
+        {
+            var regex = new Regex(@"^SSC@(?<plr>[0-9A-F]+)@(?<tplr>[0-9A-F]+)@\.(?<type>plr|tplr)$");
+            var match = regex.Match(path);
+            if (match.Success)
+            {
+                return Convert.FromHexString(match.Groups[match.Groups["type"].Value].Value);
+            }
+
+            throw new ArgumentException("Regex match failed.");
+        }
+
+        return func(path, cloud);
+    }
+
     // 目前改版后没有办法同时获取到data和tag进行同步上传,只能重写保存函数,但是不具备向后兼容性,各个版本可能会有变动导致mod很容易过期(悲
     void SSCSave(On_Player.orig_InternalSavePlayerFile func, PlayerFileData file_data)
     {
-        if (!file_data.ServerSideCharacter)
+        if (!file_data.ServerSideCharacter || file_data.Player.ghost)
         {
-            func(file_data);
+            func(file_data); // Ghost的Player会跳转原函数,然后因为SSC而被忽略
             return;
         }
 
@@ -199,14 +200,19 @@ public class HookSystem : ModSystem
         }
     }
 
-    public override void Unload()
+    // 硬核死亡删除云存档
+    void GoodKill(On_Player.orig_KillMeForGood func, Player player)
     {
-        IL_NetMessage.SendData -= IgnoreGameMode;
-        IL_MessageBuffer.GetData -= SSCInit;
-        IL_Main.DrawInterface -= HideLayerBySSC;
-        On_Player.InternalSavePlayerFile -= SSCSave;
-        On_FileUtilities.Exists -= ExistByPass;
-        On_FileUtilities.ReadAllBytes -= ReadByPass;
-        IL_Main.DoUpdate_AutoSave -= FixAutoSaveTime;
+        var file_data = Main.ActivePlayerFileData;
+        if (file_data.ServerSideCharacter)
+        {
+            var mp = ModContent.GetInstance<SSC>().GetPacket();
+            mp.Write((byte)SSC.MsgID.TryRemove);
+            mp.Write(SteamUser.GetSteamID().m_SteamID.ToString());
+            mp.Write(file_data.Player.name);
+            mp.Send();
+        }
+
+        func(player);
     }
 }
