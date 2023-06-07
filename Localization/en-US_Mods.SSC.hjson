@@ -1,0 +1,25 @@
+Configs: {
+	ServerConfig: {
+		DisplayName: Server Config
+
+		StartLife: {
+			Label: Start Life
+			Tooltip: ""
+		}
+
+		StartMana: {
+			Label: Start Mana
+			Tooltip: ""
+		}
+
+		EveryWorld: {
+			Label: Every World
+			Tooltip: ""
+		}
+
+		Tip: {
+			Label: Tip
+			Tooltip: ""
+		}
+	}
+}

@@ -1,9 +1,11 @@
-﻿using Microsoft.Xna.Framework;
+﻿using System;
+using Microsoft.Xna.Framework;
+using Microsoft.Xna.Framework.Graphics;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 
-namespace SSC;
+namespace SSC.UIKit;
 
 public class UIContainer : UIPanel
 {
@@ -21,8 +23,27 @@ public class UIContainer : UIPanel
         Anchor = false;
     }
 
+    protected override void DrawSelf(SpriteBatch spriteBatch)
+    {
+        Console.WriteLine("DrawSelf");
+        base.DrawSelf(spriteBatch);
+    }
+
+    public override void Draw(SpriteBatch spriteBatch)
+    {
+        Console.WriteLine("Draw");
+        base.Draw(spriteBatch);
+    }
+
+    public override void Recalculate()
+    {
+        Console.WriteLine("Recalculate");
+        base.Recalculate();
+    }
+
     public override void Update(GameTime gameTime)
     {
+        Console.WriteLine("Update");
         if (ContainsPoint(Main.MouseScreen))
         {
             Main.LocalPlayer.mouseInterface = true;
