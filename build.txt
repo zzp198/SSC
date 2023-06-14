@@ -1,4 +1,4 @@
-displayName = SSC - Server Side Character
+displayName = SSC - 服务端存档
 author = zzp198
 version = 2023.6.0
 dllReferences = 

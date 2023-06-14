@@ -1,25 +1,25 @@
 Configs: {
 	ServerConfig: {
-		DisplayName: Server Config
-
-		StartLife: {
-			Label: Start Life
+		Tip: {
 			Tooltip: ""
-		}
-
-		StartMana: {
-			Label: Start Mana
-			Tooltip: ""
+			Label: Tip
 		}
 
 		EveryWorld: {
-			Label: Every World
 			Tooltip: ""
+			Label: Every World
 		}
 
-		Tip: {
-			Label: Tip
+		StartMana: {
 			Tooltip: ""
+			Label: Start Mana
 		}
+
+		StartLife: {
+			Tooltip: ""
+			Label: Start Life
+		}
+
+		DisplayName: Server Config
 	}
 }

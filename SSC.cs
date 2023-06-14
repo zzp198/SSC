@@ -125,13 +125,13 @@ public class SSC : Mod
                 if (!first && ModContent.GetInstance<ServerConfig>().Tip)
                 {
                     // TODO
-                    ChatHelper.SendChatMessageToClient(NetworkText.FromLiteral("保存成功"), Color.Yellow, from);
+                    ChatHelper.SendChatMessageToClient(NetworkText.FromLiteral("Save successful. 保存成功."), Color.Yellow, from);
                 }
 
                 if (first)
                 {
                     // TODO
-                    ChatHelper.SendChatMessageToClient(NetworkText.FromLiteral("创建成功"), Color.Yellow, from);
+                    ChatHelper.SendChatMessageToClient(NetworkText.FromLiteral("Create successful. 创建成功"), Color.Yellow, from);
                     NetMessage.TrySendData(MessageID.WorldData, from);
                 }
 
@@ -248,13 +248,13 @@ public class SSC : Mod
                     File.Delete(Path.Combine(dir, id, $"{name}.tplr"));
 
                     // TODO
-                    ChatHelper.SendChatMessageToClient(NetworkText.FromLiteral("删除成功"), Color.Yellow, from);
+                    ChatHelper.SendChatMessageToClient(NetworkText.FromLiteral("Delete successful. 删除成功"), Color.Yellow, from);
 
                     NetMessage.TrySendData(MessageID.WorldData, from);
                 }
                 else
                 {
-                    ChatHelper.SendChatMessageToClient(NetworkText.FromLiteral("删除失败"), Color.Yellow, from);
+                    ChatHelper.SendChatMessageToClient(NetworkText.FromLiteral("Delete failed. 删除失败"), Color.Yellow, from);
                 }
 
                 break;
