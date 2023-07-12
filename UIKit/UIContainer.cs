@@ -1,6 +1,4 @@
-﻿using System;
-using Microsoft.Xna.Framework;
-using Microsoft.Xna.Framework.Graphics;
+﻿using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
@@ -23,27 +21,8 @@ public class UIContainer : UIPanel
         Anchor = false;
     }
 
-    protected override void DrawSelf(SpriteBatch spriteBatch)
-    {
-        Console.WriteLine("DrawSelf");
-        base.DrawSelf(spriteBatch);
-    }
-
-    public override void Draw(SpriteBatch spriteBatch)
-    {
-        Console.WriteLine("Draw");
-        base.Draw(spriteBatch);
-    }
-
-    public override void Recalculate()
-    {
-        Console.WriteLine("Recalculate");
-        base.Recalculate();
-    }
-
     public override void Update(GameTime gameTime)
     {
-        Console.WriteLine("Update");
         if (ContainsPoint(Main.MouseScreen))
         {
             Main.LocalPlayer.mouseInterface = true;
@@ -79,7 +58,6 @@ public class UIContainer : UIPanel
             Top.Set(Main.mouseY - AnchorVector.Y, 0f);
         }
 
-        Recalculate();
         base.Update(gameTime); // don't remove.
     }
 }

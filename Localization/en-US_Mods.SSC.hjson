@@ -21,5 +21,10 @@ Configs: {
 		}
 
 		DisplayName: Server Config
+
+		SteamCloud: {
+			Label: Steam Cloud
+			Tooltip: ""
+		}
 	}
 }
