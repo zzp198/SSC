@@ -1,2 +1,2 @@
-SSC - Server Side Character
+SSC - Server Side Character for 1.4.4
 
