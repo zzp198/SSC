@@ -13,7 +13,7 @@ using Terraria.Localization;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 
-namespace SSC;
+namespace SSC.Core;
 
 public class SSC : Mod
 {

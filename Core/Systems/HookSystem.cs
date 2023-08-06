@@ -14,7 +14,7 @@ using Terraria.ModLoader.IO;
 using Terraria.UI;
 using Terraria.Utilities;
 
-namespace SSC;
+namespace SSC.Core.Systems;
 
 public class HookSystem : ModSystem
 {
