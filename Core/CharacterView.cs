@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.Reflection;
 using Microsoft.Xna.Framework;
 using Microsoft.Xna.Framework.Graphics;
-using SSC.UIKit;
 using Steamworks;
 using Terraria;
 using Terraria.GameContent.UI.Elements;
@@ -17,11 +16,11 @@ using Terraria.ModLoader.UI.Elements;
 using Terraria.UI;
 using Terraria.Utilities;
 
-namespace SSC;
+namespace SSC.Core;
 
 public class CharacterView : UIState
 {
-    internal UIContainer Container;
+    internal UILayer Container;
     internal UIGrid CharacterGrid;
     internal Player Character;
     internal UICharacterCreation CharacterCreation;
@@ -55,7 +54,7 @@ public class CharacterView : UIState
 
     public override void OnActivate()
     {
-        Append(Container = new UIContainer
+        Append(Container = new UILayer
         {
             Width = new StyleDimension(370, 0),
             Height = new StyleDimension(600, 0),
@@ -172,8 +171,8 @@ public class CharacterView : UIState
         {
             var invoke = typeof(UICharacterCreation).GetMethod("SetupPlayerStatsAndInventoryBasedOnDifficulty", (BindingFlags)36);
             invoke?.Invoke(CharacterCreation, Array.Empty<object>());
-            Character.statLife = Character.statLifeMax = ModContent.GetInstance<ServerConfig>().StartLife;
-            Character.statMana = Character.statManaMax = ModContent.GetInstance<ServerConfig>().StartMana;
+            Character.statLife = Character.statLifeMax = ModContent.GetInstance<Configs.ServerConfig>().StartLife;
+            Character.statMana = Character.statManaMax = ModContent.GetInstance<Configs.ServerConfig>().StartMana;
             var data = new PlayerFileData("Create.SSC", false)
             {
                 Metadata = FileMetadata.FromCurrentSettings(FileType.Player), Player = Character
@@ -246,7 +245,7 @@ public class CharacterView : UIState
             itemPlayButton.OnLeftClick += (_, _) =>
             {
                 var mp = ModContent.GetInstance<SSC>().GetPacket();
-                mp.Write((byte)SSC.MsgID.TryLoad);
+                mp.Write((byte)MsgID.TryLoad);
                 mp.Write(SteamUser.GetSteamID().m_SteamID.ToString());
                 mp.Write(tag.GetString("name"));
                 SSC.StreamPatcher(mp);
@@ -267,7 +266,7 @@ public class CharacterView : UIState
             itemDeleteButton.OnRightDoubleClick += (_, _) =>
             {
                 var mp = ModContent.GetInstance<SSC>().GetPacket();
-                mp.Write((byte)SSC.MsgID.TryRemove);
+                mp.Write((byte)MsgID.TryRemove);
                 mp.Write(SteamUser.GetSteamID().m_SteamID.ToString());
                 mp.Write(tag.Get<string>("name"));
                 SSC.StreamPatcher(mp);

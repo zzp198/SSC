@@ -18,15 +18,6 @@ namespace SSC.Core;
 public class SSC : Mod
 {
     internal readonly static string PATH = Path.Combine(Main.SavePath, nameof(SSC));
-
-    public enum MsgID : byte
-    {
-        Stream,
-        TrySave,
-        TryLoad,
-        TryRemove,
-    }
-
     internal readonly static Dictionary<int, byte[]> Stream = new();
 
     public override void Load()
@@ -99,10 +90,10 @@ public class SSC : Mod
 
 
                 var dir = SSC.PATH;
-                if (ModContent.GetInstance<ServerConfig>().EveryWorld)
-                {
-                    dir = Path.Combine(dir, Main.ActiveWorldFileData.UniqueId.ToString());
-                }
+                // if (ModContent.GetInstance<Configs.ServerConfig>().EveryWorld)
+                // {
+                //     dir = Path.Combine(dir, Main.ActiveWorldFileData.UniqueId.ToString());
+                // }
 
                 if (first && Directory.GetFiles(dir, $"{name}.plr", SearchOption.AllDirectories).Length > 0) // 深度搜索,防止不同玩家间同名注册
                 {
@@ -122,11 +113,11 @@ public class SSC : Mod
                 File.WriteAllBytes(Path.Combine(dir, id, $"{name}.plr"), data);
                 TagIO.ToFile(tag, Path.Combine(dir, id, $"{name}.tplr"));
 
-                if (!first && ModContent.GetInstance<ServerConfig>().Tip)
-                {
-                    // TODO
-                    ChatHelper.SendChatMessageToClient(NetworkText.FromLiteral("Save successful. 保存成功."), Color.Yellow, from);
-                }
+                // if (!first && ModContent.GetInstance<Configs.ServerConfig>().Tip)
+                // {
+                //     // TODO
+                //     ChatHelper.SendChatMessageToClient(NetworkText.FromLiteral("Save successful. 保存成功."), Color.Yellow, from);
+                // }
 
                 if (first)
                 {
@@ -151,10 +142,10 @@ public class SSC : Mod
                     }
 
                     var dir = SSC.PATH;
-                    if (ModContent.GetInstance<ServerConfig>().EveryWorld)
-                    {
-                        dir = Path.Combine(dir, Main.ActiveWorldFileData.UniqueId.ToString());
-                    }
+                    // if (ModContent.GetInstance<Configs.ServerConfig>().EveryWorld)
+                    // {
+                    //     dir = Path.Combine(dir, Main.ActiveWorldFileData.UniqueId.ToString());
+                    // }
 
                     var file_data = Player.LoadPlayer(Path.Combine(dir, id, $"{name}.plr"), false);
                     if (file_data.Player.difficulty == PlayerDifficultyID.Creative && !Main.GameModeInfo.IsJourneyMode)
@@ -181,7 +172,7 @@ public class SSC : Mod
                     var tag = TagIO.FromFile(Path.Combine(dir, id, $"{name}.tplr"));
 
                     var mp = ModContent.GetInstance<SSC>().GetPacket();
-                    mp.Write((byte)SSC.MsgID.TryLoad);
+                    mp.Write((byte)MsgID.TryLoad);
                     mp.Write(data.Length);
                     mp.Write(data);
                     TagIO.Write(tag, mp);
@@ -225,7 +216,7 @@ public class SSC : Mod
                     }
                     finally
                     {
-                        ViewSystem.View.SetState(null);
+                        Systems.ViewSystem.View.SetState(null);
                     }
                 }
 
@@ -237,10 +228,10 @@ public class SSC : Mod
                 var name = reader.ReadString();
 
                 var dir = SSC.PATH;
-                if (ModContent.GetInstance<ServerConfig>().EveryWorld)
-                {
-                    dir = Path.Combine(dir, Main.ActiveWorldFileData.UniqueId.ToString());
-                }
+                // if (ModContent.GetInstance<Configs.ServerConfig>().EveryWorld)
+                // {
+                //     dir = Path.Combine(dir, Main.ActiveWorldFileData.UniqueId.ToString());
+                // }
 
                 if (File.Exists(Path.Combine(dir, id, $"{name}.plr")))
                 {

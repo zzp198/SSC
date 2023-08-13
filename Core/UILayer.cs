@@ -3,9 +3,9 @@ using Terraria;
 using Terraria.GameContent.UI.Elements;
 using Terraria.UI;
 
-namespace SSC.UIKit;
+namespace SSC.Core;
 
-public class UIContainer : UIPanel
+public class UILayer : UIPanel
 {
     public bool Anchor;
     public Vector2 AnchorVector;

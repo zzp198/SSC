@@ -6,7 +6,7 @@ using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
 
-namespace SSC;
+namespace SSC.Core.Systems;
 
 public class ViewSystem : ModSystem
 {
@@ -54,10 +54,10 @@ public class ViewSystem : ModSystem
     {
         var tag = new TagCompound();
         var dir = SSC.PATH;
-        if (ModContent.GetInstance<ServerConfig>().EveryWorld)
-        {
-            dir = Path.Combine(dir, Main.ActiveWorldFileData.UniqueId.ToString());
-        }
+        // if (ModContent.GetInstance<Configs.ServerConfig>().EveryWorld)
+        // {
+        //     dir = Path.Combine(dir, Main.ActiveWorldFileData.UniqueId.ToString());
+        // }
 
         Utils.TryCreatingDirectory(dir);
 

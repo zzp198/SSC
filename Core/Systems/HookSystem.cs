@@ -187,7 +187,7 @@ public class HookSystem : ModSystem
                     var tag = (TagCompound)SaveData?.Invoke(null, new object[] { file_data.Player });
 
                     var mp = Mod.GetPacket();
-                    mp.Write((byte)SSC.MsgID.TrySave);
+                    mp.Write((byte)MsgID.TrySave);
                     mp.Write(SteamUser.GetSteamID().m_SteamID.ToString());
                     mp.Write(file_data.Player.name);
                     mp.Write(data.Length);
@@ -207,7 +207,7 @@ public class HookSystem : ModSystem
         if (file_data.ServerSideCharacter)
         {
             var mp = ModContent.GetInstance<SSC>().GetPacket();
-            mp.Write((byte)SSC.MsgID.TryRemove);
+            mp.Write((byte)MsgID.TryRemove);
             mp.Write(SteamUser.GetSteamID().m_SteamID.ToString());
             mp.Write(file_data.Player.name);
             mp.Send();

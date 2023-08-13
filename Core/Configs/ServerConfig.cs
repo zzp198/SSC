@@ -3,7 +3,6 @@ using Terraria.ModLoader.Config;
 
 namespace SSC.Core.Configs;
 
-// ReSharper disable once FieldCanBeMadeReadOnly.Global
 public class ServerConfig : ModConfig
 {
     public override ConfigScope Mode => ConfigScope.ServerSide;
@@ -17,6 +16,4 @@ public class ServerConfig : ModConfig
     [ColorHSLSlider, SliderColor(0, 0, 200)] //
     [DefaultValue(20)]
     public int StartMana = 20;
-    
-    
 }
