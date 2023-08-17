@@ -54,10 +54,10 @@ public class ViewSystem : ModSystem
     {
         var tag = new TagCompound();
         var dir = SSC.PATH;
-        // if (ModContent.GetInstance<Configs.ServerConfig>().EveryWorld)
-        // {
-        //     dir = Path.Combine(dir, Main.ActiveWorldFileData.UniqueId.ToString());
-        // }
+        if (ModContent.GetInstance<Configs.ServerConfig>().EveryWorld)
+        {
+            dir = Path.Combine(dir, Main.ActiveWorldFileData.UniqueId.ToString());
+        }
 
         Utils.TryCreatingDirectory(dir);
 

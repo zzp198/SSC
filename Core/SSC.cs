@@ -22,6 +22,8 @@ public class SSC : Mod
 
     public override void Load()
     {
+        Main.runningCollectorsEdition = true;
+
         for (var i = 0; i <= byte.MaxValue; i++)
         {
             Stream[i] = Array.Empty<byte>();
@@ -90,10 +92,10 @@ public class SSC : Mod
 
 
                 var dir = SSC.PATH;
-                // if (ModContent.GetInstance<Configs.ServerConfig>().EveryWorld)
-                // {
-                //     dir = Path.Combine(dir, Main.ActiveWorldFileData.UniqueId.ToString());
-                // }
+                if (ModContent.GetInstance<Configs.ServerConfig>().EveryWorld)
+                {
+                    dir = Path.Combine(dir, Main.ActiveWorldFileData.UniqueId.ToString());
+                }
 
                 if (first && Directory.GetFiles(dir, $"{name}.plr", SearchOption.AllDirectories).Length > 0) // 深度搜索,防止不同玩家间同名注册
                 {
@@ -142,10 +144,10 @@ public class SSC : Mod
                     }
 
                     var dir = SSC.PATH;
-                    // if (ModContent.GetInstance<Configs.ServerConfig>().EveryWorld)
-                    // {
-                    //     dir = Path.Combine(dir, Main.ActiveWorldFileData.UniqueId.ToString());
-                    // }
+                    if (ModContent.GetInstance<Configs.ServerConfig>().EveryWorld)
+                    {
+                        dir = Path.Combine(dir, Main.ActiveWorldFileData.UniqueId.ToString());
+                    }
 
                     var file_data = Player.LoadPlayer(Path.Combine(dir, id, $"{name}.plr"), false);
                     if (file_data.Player.difficulty == PlayerDifficultyID.Creative && !Main.GameModeInfo.IsJourneyMode)
@@ -228,10 +230,10 @@ public class SSC : Mod
                 var name = reader.ReadString();
 
                 var dir = SSC.PATH;
-                // if (ModContent.GetInstance<Configs.ServerConfig>().EveryWorld)
-                // {
-                //     dir = Path.Combine(dir, Main.ActiveWorldFileData.UniqueId.ToString());
-                // }
+                if (ModContent.GetInstance<Configs.ServerConfig>().EveryWorld)
+                {
+                    dir = Path.Combine(dir, Main.ActiveWorldFileData.UniqueId.ToString());
+                }
 
                 if (File.Exists(Path.Combine(dir, id, $"{name}.plr")))
                 {

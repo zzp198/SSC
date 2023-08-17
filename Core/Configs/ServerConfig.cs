@@ -16,4 +16,8 @@ public class ServerConfig : ModConfig
     [ColorHSLSlider, SliderColor(0, 0, 200)] //
     [DefaultValue(20)]
     public int StartMana = 20;
+
+
+    [DefaultValue(false)] //
+    public bool EveryWorld = false;
 }

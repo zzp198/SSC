@@ -77,7 +77,8 @@ public class CharacterView : UIState
         });
         CharacterGrid.SetScrollbar(scrollbar);
 
-        CharacterCreation = new UICharacterCreation(Character = new Player());
+        Character = new Player();
+        CharacterCreation = new UICharacterCreation(Character);
 
         CharacterCreationPanel = new UIPanel
         {
@@ -171,6 +172,7 @@ public class CharacterView : UIState
         {
             var invoke = typeof(UICharacterCreation).GetMethod("SetupPlayerStatsAndInventoryBasedOnDifficulty", (BindingFlags)36);
             invoke?.Invoke(CharacterCreation, Array.Empty<object>());
+
             Character.statLife = Character.statLifeMax = ModContent.GetInstance<Configs.ServerConfig>().StartLife;
             Character.statMana = Character.statManaMax = ModContent.GetInstance<Configs.ServerConfig>().StartMana;
             var data = new PlayerFileData("Create.SSC", false)
@@ -182,6 +184,7 @@ public class CharacterView : UIState
             var SavePlayer = typeof(Player).GetMethod("InternalSavePlayerFile", BindingFlags.NonPublic | BindingFlags.Static);
             FileUtilities.ProtectedInvoke(() => SavePlayer?.Invoke(null, new object[] { data }));
 
+            PlayerLoader.SetStartInventory(Character, new List<Item>());
             NameSearchBar.SetContents("");
             Character.difficulty = PlayerDifficultyID.SoftCore;
         };
