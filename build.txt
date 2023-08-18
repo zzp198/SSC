@@ -1,6 +1,6 @@
 displayName = SSC - 云存档
 author = zzp198
-version = 2023.9.1
+version = 2023.9.2
 dllReferences = 
 modReferences = 
 weakReferences = 
