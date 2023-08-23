@@ -26,5 +26,10 @@ Configs: {
 			Label: Starting Mana
 			Tooltip: ""
 		}
+
+		Administrators: {
+			Label: Administrators
+			Tooltip: ""
+		}
 	}
 }
