@@ -7,7 +7,7 @@ namespace SSC.Core;
 public class SSC : Mod
 {
     public static string PATH => Path.Combine(Main.SavePath, nameof(SSC));
-    public static string WorldID => Main.ActiveWorldFileData.UniqueId.ToString();
+    public static string UID => Main.ActiveWorldFileData.UniqueId.ToString();
 
     public override void Load()
     {

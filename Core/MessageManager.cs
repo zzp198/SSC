@@ -9,11 +9,14 @@ public class MessageManager : ModSystem
 
     public override void OnModLoad()
     {
-        MessageSegment = new List<(byte[] data, string hash)>(255);
+        MessageSegment = new List<(byte[] data, string hash)>(256); // [0,255]
     }
 
     public void SendMessage(ModPacket mp, int to, int from)
     {
+        
+        
+        
     }
 
     public override void OnModUnload()
