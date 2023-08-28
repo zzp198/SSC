@@ -192,7 +192,7 @@ public class SSC : Mod
                 {
                     File.Delete(Path.Combine(PATH, MapID, id, $"{name}.plr"));
                     File.Delete(Path.Combine(PATH, MapID, id, $"{name}.tplr"));
-                    ChatHelper.SendChatMessageToClient(NetworkText.FromLiteral("Mods.SSC.EraseSuccessful"), Color.Yellow, from);
+                    ChatHelper.SendChatMessageToClient(NetworkText.FromKey("Mods.SSC.EraseSuccessful"), Color.Yellow, from);
                 }
 
                 NetMessage.TrySendData(Terraria.ID.MessageID.WorldData, from);

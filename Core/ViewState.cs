@@ -148,12 +148,10 @@ public class ViewState : UIState
         CreateButton.OnLeftClick += (_, _) =>
         {
             var Character = new Player();
+            CharacterCreation = new UICharacterCreation(Character); // 注意会重置Player的难度
+
             Character.name = Dummy.name;
             Character.difficulty = Dummy.difficulty;
-            Character.statLife = Character.statLifeMax = ModContent.GetInstance<ServerConfig>().StartingLife;
-            Character.statMana = Character.statManaMax = ModContent.GetInstance<ServerConfig>().StartingMana;
-
-            CharacterCreation = new UICharacterCreation(Character);
             var invoke = typeof(UICharacterCreation).GetMethod("SetupPlayerStatsAndInventoryBasedOnDifficulty", (BindingFlags)36);
             invoke?.Invoke(CharacterCreation, Array.Empty<object>());
 

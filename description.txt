@@ -1,1 +1,4 @@
 SSC - Server Side Character for 1.4.4
+
+2023.8.28
+全新重构,更新版本前注意设置的更改.

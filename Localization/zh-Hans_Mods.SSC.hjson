@@ -1,0 +1,25 @@
+Configs: {
+	ServerConfig: {
+		DisplayName: 服务端配置
+
+		SaveForWorld: {
+			Label: 世界独立存档
+			Tooltip: 默认存档和世界相互独立.选择此项后存档将和世界绑定,更换世界会无法使用原有的存档.
+		}
+
+		StartingLife: {
+			Label: 初始生命
+			Tooltip: ""
+		}
+
+		StartingMana: {
+			Label: 初始魔力
+			Tooltip: ""
+		}
+	}
+}
+
+NameError: 用户名无效,请不要添加一些奇怪的字符.
+SaveSuccessful: 保存成功.
+EraseSuccessful: 删除成功.
+RightDoubleClick: 右键双击!

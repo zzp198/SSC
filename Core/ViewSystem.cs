@@ -75,10 +75,7 @@ public class ViewSystem : ModSystem
     public override void NetReceive(BinaryReader reader)
     {
         var root = TagIO.Read(reader);
-        if (View?.CurrentState is ViewState)
-        {
-            // ((ViewState)View?.CurrentState).Update(tag);
-        }
+        (View?.CurrentState as ViewState)?.Calc(root);
     }
 
     public override void Unload()

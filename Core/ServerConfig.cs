@@ -13,11 +13,13 @@ public class ServerConfig : ModConfig
     [ReloadRequired]
     public bool SaveForWorld = false;
 
-    [Range(1, 500), Increment(1)] //
-    [DefaultValue(100)]
-    public int StartingLife = 100;
-
-    [Range(0, 200), Increment(1)] //
-    [DefaultValue(20)]
-    public int StartingMana = 20;
+    // [Range(1, 500), Increment(1)] //
+    // [DefaultValue(100)]
+    // [ReloadRequired]
+    // public int StartingLife = 100;
+    //
+    // [Range(0, 200), Increment(1)] //
+    // [DefaultValue(20)]
+    // [ReloadRequired]
+    // public int StartingMana = 20;
 }
