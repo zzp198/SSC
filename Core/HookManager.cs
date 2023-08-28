@@ -83,7 +83,7 @@ public class HookManager : ModSystem
                 Player = new Player
                 {
                     name = SteamUser.GetSteamID().m_SteamID.ToString(), difficulty = game_mode,
-                    // MsgID -> StatLife:16  Ghost:13  Dead:12&16
+                    // MessageID -> StatLife:16  Ghost:13  Dead:12&16
                     statLife = 0, statMana = 0, dead = true, ghost = true,
                     // 避免因为进入世界的自动复活,导致客户端与服务端失去同步
                     respawnTimer = int.MaxValue, lastTimePlayerWasSaved = long.MaxValue,
@@ -104,6 +104,8 @@ public class HookManager : ModSystem
         cur.GotoNext(MoveType.After, i => i.MatchCall(typeof(SystemLoader), nameof(SystemLoader.ModifyInterfaceLayers)));
         cur.EmitDelegate<Func<List<GameInterfaceLayer>, List<GameInterfaceLayer>>>(layers =>
         {
+            Console.WriteLine(Main.debugWords);
+            Console.WriteLine(Main.saveTimer);
             if (ModContent.GetInstance<ViewSystem>().View?.CurrentState != null)
             {
                 layers.ForEach(layer => layer.Active = layer.Name switch
@@ -163,10 +165,13 @@ public class HookManager : ModSystem
 
         // 获取Array和Tag进行保存上传.
         var array = 0;
-        cur.GotoNext(MoveType.After, i => i.MatchCallvirt<MemoryStream>(nameof(MemoryStream.ToArray)), i => i.MatchStloc(out array));
-        cur.GotoNext(MoveType.After, i => i.MatchLdloc(1), i => i.MatchCall("Terraria.ModLoader.IO.PlayerIO", "SaveData"));
-        cur.Emit(OpCodes.Ldarg_0);
-        cur.Emit(OpCodes.Ldloc_S, (byte)array);
+        cur.GotoNext(MoveType.After,
+            i => i.MatchCallvirt<MemoryStream>(nameof(MemoryStream.ToArray)), i => i.MatchStloc(out array),
+            i => i.MatchLdloc(1), i => i.MatchCall(typeof(PlayerLoader), nameof(PlayerLoader.PostSavePlayer)),
+            i => i.MatchLdloc(1), i => i.MatchCall("Terraria.ModLoader.IO.PlayerIO", "SaveData")
+        );
+        cur.Emit(OpCodes.Ldarg_0); // file_data
+        cur.Emit(OpCodes.Ldloc_S, (byte)array); // data
         cur.EmitDelegate<Func<TagCompound, PlayerFileData, byte[], TagCompound>>((root, file_data, data) =>
         {
             // 如果存档为符合条件的SSC存档,则上传保存.
@@ -186,7 +191,7 @@ public class HookManager : ModSystem
             return root;
         });
 
-        // 因为额外放行了特殊的SSC存档,如果是SSC存档,则跳过本地的文件读写保存.
+        // 因为额外放行了特殊的SSC存档,如果是SSC存档,则跳过后续的本地文件保存.
         cur.Emit(OpCodes.Ldarg_0);
         cur.EmitDelegate<Func<PlayerFileData, bool>>(file_data => file_data.ServerSideCharacter);
         var br = cur.DefineLabel();

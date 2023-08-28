@@ -21,6 +21,9 @@ public class SSC : Mod
 
     public override void Load()
     {
+        Main.showFrameRate = true; // 显示DPS
+        Main.debugWords = "(SSC)";
+        Main.SettingsUnlock_WorldEvil = true; // 解锁腐化猩红自选
         Main.runningCollectorsEdition = true; // 白嫖一只小兔子
     }
 
