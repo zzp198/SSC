@@ -87,6 +87,7 @@ public class SSC : Mod
 
                 if (first)
                 {
+                    ChatHelper.DisplayMessageOnClient(NetworkText.FromKey("Mods.SSC.PlayerVanity"), Color.Green, from);
                     NetMessage.TrySendData(Terraria.ID.MessageID.WorldData, from);
                 }
 
@@ -155,7 +156,7 @@ public class SSC : Mod
                     var binary = $"SSC@{Convert.ToHexString(data)}@{Convert.ToHexString(memoryStream.ToArray())}@.plr";
                     var remote_file_data = Player.LoadPlayer(binary, false);
 
-                    // 需要修改file_data的Path,同时注意继承PlayTime,否则新档会丢失游玩时间.
+                    // 需要修改file_data的Path为SSC以开启云存档,同时注意继承PlayTime,否则新档会丢失游玩时间.
                     var file_data = new PlayerFileData(Path.Combine(Main.PlayerPath, $"{SteamUser.GetSteamID().m_SteamID}.SSC"), false)
                     {
                         Metadata = FileMetadata.FromCurrentSettings(FileType.Player),

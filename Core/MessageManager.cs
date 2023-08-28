@@ -12,7 +12,7 @@ namespace SSC.Core;
 
 public class MessageManager : ModSystem
 {
-    public static List<byte[]> MessageSegment;
+    internal static List<byte[]> MessageSegment;
 
     public override void Load()
     {
