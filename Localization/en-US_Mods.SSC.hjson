@@ -7,8 +7,8 @@ Configs: {
 			Tooltip:
 				'''
 				Default player is not bounded with the world, and players created in this situation can join all worlds.
-                After selecting this option, the player created will be bound to the world.
-                Changing the world will prevent the original save from being used.
+				            After selecting this option, the player created will be bound to the world.
+				            Changing the world will prevent the original save from being used.
 				'''
 		}
 
