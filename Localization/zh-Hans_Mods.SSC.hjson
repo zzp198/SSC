@@ -6,29 +6,19 @@ Configs: {
 			Label: 世界独立存档
 			Tooltip:
 				'''
-				默认玩家和世界无关联,在此情况下创建的玩家可进入所有地图.不可在游戏中更改!
+				默认玩家和世界无关联,在此情况下创建的玩家可进入所有地图.
 				选择此项后创建的玩家将和世界绑定,更换世界会无法使用原有的存档.
 				'''
 		}
 
 		StartItems: {
 			Label: 初始物品
-			Tooltip: 对应物品的ID和堆叠数量,可在游戏中更改!
-		}
-
-		StrictTransmit: {
-			// Label: 严格传输
-			// Tooltip: ""
-		}
-
-		StrictBanned: {
-			// Label: 严格限制
-			// Tooltip: ""
+			Tooltip: ""
 		}
 
 		Password: {
-			// Label: Password
-			// Tooltip: ""
+			Label: 密码校验
+			Tooltip: "在控制台使用admin指令查看"
 		}
 	}
 }
