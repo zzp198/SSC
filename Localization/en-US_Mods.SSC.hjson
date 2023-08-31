@@ -3,7 +3,7 @@ Configs: {
 		DisplayName: 服务端配置
 
 		SaveForWorld: {
-			Label: 世界独立存档
+			Label: Save For World
 			Tooltip:
 				'''
 				默认玩家和世界无关联,在此情况下创建的玩家可进入所有地图.
@@ -12,12 +12,12 @@ Configs: {
 		}
 
 		StartItems: {
-			Label: 初始物品
+			Label: Start Items
 			Tooltip: ""
 		}
 
 		Password: {
-			Label: 密码校验
+			Label: Password
 			Tooltip: "在控制台使用admin指令查看"
 		}
 	}
