@@ -24,7 +24,7 @@ public class ViewSystem : ModSystem
     {
         if (View?.CurrentState != null)
         {
-            View?.Update(gameTime);
+            View.Update(gameTime);
         }
     }
 
@@ -75,7 +75,7 @@ public class ViewSystem : ModSystem
     public override void NetReceive(BinaryReader reader)
     {
         var root = TagIO.Read(reader);
-        (View?.CurrentState as ViewState)?.Calc(root);
+        (View?.CurrentState as PlayerState)?.Calc(root);
     }
 
     public override void Unload()

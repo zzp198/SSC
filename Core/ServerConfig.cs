@@ -1,9 +1,9 @@
-﻿using System.ComponentModel;
+﻿using System.Collections.Generic;
+using System.ComponentModel;
 using Terraria.ModLoader.Config;
 
 namespace SSC.Core;
 
-[BackgroundColor(164, 153, 190)]
 public class ServerConfig : ModConfig
 {
     public override ConfigScope Mode => ConfigScope.ServerSide;
@@ -11,15 +11,29 @@ public class ServerConfig : ModConfig
     // [Header("")]
     [DefaultValue(false)] //
     [ReloadRequired]
+    [BackgroundColor(255, 100, 100)]
     public bool SaveForWorld = false;
 
-    // [Range(1, 500), Increment(1)] //
-    // [DefaultValue(100)]
-    // [ReloadRequired]
-    // public int StartingLife = 100;
-    //
-    // [Range(0, 200), Increment(1)] //
-    // [DefaultValue(20)]
-    // [ReloadRequired]
-    // public int StartingMana = 20;
+    [DefaultListValue(1)] //
+    [Expand(false)]
+    public Dictionary<ItemDefinition, int> StartItems = new();
+
+    [DefaultValue("")] //
+    public string Password = "";
+
+    public override bool AcceptClientChanges(ModConfig obj, int from, ref string message)
+    {
+        if (obj is not ServerConfig serverConfig)
+        {
+            return false;
+        }
+
+        message = serverConfig.Password == SSC.Password ? "配置保存成功." : "密码错误.";
+        return serverConfig.Password == SSC.Password;
+    }
+
+    public override void OnChanged()
+    {
+        Password = "";
+    }
 }

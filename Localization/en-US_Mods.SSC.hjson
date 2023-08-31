@@ -4,7 +4,21 @@ Configs: {
 
 		SaveForWorld: {
 			Label: 世界独立存档
-			Tooltip: 默认存档和世界相互独立.选择此项后存档将和世界绑定,更换世界会无法使用原有的存档.
+			Tooltip:
+				'''
+				默认玩家和世界无关联,在此情况下创建的玩家可进入所有地图.
+				选择此项后创建的玩家将和世界绑定,更换世界会无法使用原有的存档.
+				'''
+		}
+
+		StartItems: {
+			Label: 初始物品
+			Tooltip: ""
+		}
+
+		Password: {
+			Label: 密码校验
+			Tooltip: "在控制台使用admin指令查看"
 		}
 	}
 }

@@ -18,6 +18,7 @@ public class SSC : Mod
     // SSC/([MapID:xxx-x-xxx])/[SteamID:0-9]/zzp198.plr
     public static string PATH => Path.Combine(Main.SavePath, nameof(SSC));
     public static string MapID => ModContent.GetInstance<ServerConfig>().SaveForWorld ? $"{Main.ActiveWorldFileData.UniqueId}" : "";
+    public static string Password = "";
 
     public override void Load()
     {
@@ -25,6 +26,15 @@ public class SSC : Mod
         Main.debugWords = "(SSC)";
         Main.SettingsUnlock_WorldEvil = true; // 解锁腐化猩红自选
         Main.runningCollectorsEdition = true; // 白嫖一只小兔子
+    }
+
+    public override void PostSetupContent()
+    {
+        if (Main.dedServ)
+        {
+            Password = new Random().Next(0, 1000000).ToString("D6");
+            ModContent.GetInstance<AdminCommand>().Action(null, null, null);
+        }
     }
 
     public override void HandlePacket(BinaryReader reader, int from)

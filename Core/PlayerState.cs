@@ -18,7 +18,7 @@ using Terraria.Utilities;
 
 namespace SSC.Core;
 
-public class ViewState : UIState
+public class PlayerState : UIState
 {
     internal UIPanel Container;
     internal UIGrid CharacterGrid;
