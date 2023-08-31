@@ -1,13 +1,14 @@
 Configs: {
 	ServerConfig: {
-		DisplayName: 服务端配置
+		DisplayName: Server Config
 
 		SaveForWorld: {
 			Label: Save For World
 			Tooltip:
 				'''
-				默认玩家和世界无关联,在此情况下创建的玩家可进入所有地图.
-				选择此项后创建的玩家将和世界绑定,更换世界会无法使用原有的存档.
+				Default player is not bounded with the world, and players created in this situation can join all worlds.
+                After selecting this option, the player created will be bound to the world.
+                Changing the world will prevent the original save from being used.
 				'''
 		}
 
@@ -18,13 +19,13 @@ Configs: {
 
 		Password: {
 			Label: Password
-			Tooltip: "在控制台使用admin指令查看"
+			Tooltip: Using the admin command on the console.
 		}
 	}
 }
 
-NameError: 用户名无效,请不要添加一些奇怪的字符.
-PlayerVanity: 角色默认使用经典造型,后续你可以在理发师或梳妆台进行自定义.
-SaveSuccessful: 保存成功.
-EraseSuccessful: 删除成功.
-RightDoubleClick: 右键双击!
+NameError: The username is invalid, please do not add any strange chars.
+PlayerVanity: The character defaults to classic styling, and you can customize it later on at the hairdresser or dressing table.
+SaveSuccessful: Successfully saved.
+EraseSuccessful: Successfully deleted.
+RightDoubleClick: Right-double-click!

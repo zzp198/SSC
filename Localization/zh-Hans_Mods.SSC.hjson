@@ -18,7 +18,7 @@ Configs: {
 
 		Password: {
 			Label: 密码校验
-			Tooltip: "在控制台使用admin指令查看"
+			Tooltip: 在控制台使用admin指令查看
 		}
 	}
 }
