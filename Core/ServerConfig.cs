@@ -28,8 +28,9 @@ public class ServerConfig : ModConfig
             return false;
         }
 
-        message = serverConfig.Password == SSC.Password ? "配置保存成功." : "密码错误.";
-        return serverConfig.Password == SSC.Password;
+        var flag = serverConfig.Password == SSC.Password;
+        message = flag ? "配置保存成功." : "密码错误.";
+        return flag;
     }
 
     public override void OnChanged()

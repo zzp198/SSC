@@ -22,7 +22,7 @@ public class SSC : Mod
 
     public override void Load()
     {
-        Main.SettingsUnlock_WorldEvil = true; // 解锁腐化猩红自选
+        Main.SettingsUnlock_WorldEvil = true; // 解锁自选腐化猩红
         Main.runningCollectorsEdition = true; // 白嫖一只小兔子
     }
 
