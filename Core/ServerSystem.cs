@@ -2,15 +2,17 @@
 using System.IO;
 using Microsoft.Xna.Framework;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
 using Terraria.UI;
 
 namespace SSC.Core;
 
-public class ViewSystem : ModSystem
+public class ServerSystem : ModSystem
 {
     public UserInterface View;
+    public uint Countdown;
 
     public override void Load()
     {
@@ -76,6 +78,24 @@ public class ViewSystem : ModSystem
     {
         var root = TagIO.Read(reader);
         (View?.CurrentState as PlayerState)?.Calc(root);
+    }
+
+    public override void PostUpdateEverything()
+    {
+        if (Main.netMode != NetmodeID.MultiplayerClient)
+        {
+            return;
+        }
+
+        Countdown++;
+        if (Countdown > 3600)
+        {
+            Countdown = 0;
+            if (Main.ActivePlayerFileData.Path.EndsWith(".SSC"))
+            {
+                Player.SavePlayer(Main.ActivePlayerFileData);
+            }
+        }
     }
 
     public override void Unload()

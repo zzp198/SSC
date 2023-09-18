@@ -6,21 +6,6 @@ namespace SSC.Core;
 
 public class ServerPlayer : ModPlayer
 {
-    static uint Countdown;
-
-    public override void PostUpdate()
-    {
-        Countdown++;
-        if (Countdown > 3600)
-        {
-            Countdown = 0;
-            if (Main.ActivePlayerFileData.Path.EndsWith(".SSC"))
-            {
-                Player.SavePlayer(Main.ActivePlayerFileData);
-            }
-        }
-    }
-
     public override IEnumerable<Item> AddStartingItems(bool mediumCoreDeath)
     {
         var items = new List<Item>();

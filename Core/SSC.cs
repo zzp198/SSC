@@ -76,13 +76,13 @@ public class SSC : Mod
 
                 switch (first)
                 {
-                    // 需在保存的“根目录”深度查询,避免新角色出现重名.
+                    // 需在保存的“根目录”深度查询所有世界的角色,避免新角色出现重名.
                     case true when Directory.GetFiles(PATH, $"{name}.plr", SearchOption.AllDirectories).Any():
                     {
                         ChatHelper.DisplayMessageOnClient(NetworkText.FromKey(Lang.mp[5].Key, name), Color.Red, from);
                         return;
                     }
-                    // 保存时必须源文件存在,避免出现硬核偷偷回档的情况.
+                    // 保存时必须源文件存在,避免出现硬核回档的情况.
                     case false when !File.Exists(Path.Combine(PATH, MapID, id, $"{name}.plr")):
                     {
                         return;
@@ -94,7 +94,11 @@ public class SSC : Mod
                 File.WriteAllBytes(Path.Combine(PATH, MapID, id, $"{name}.plr"), data);
                 TagIO.ToFile(root, Path.Combine(PATH, MapID, id, $"{name}.tplr"));
 
-                ChatHelper.DisplayMessageOnClient(NetworkText.FromKey("Mods.SSC.SaveSuccessful"), Color.Green, from);
+                var kb = data.Length + root.Count / 1024.0;
+                var c = kb > 64 ? $"[c/00FF00:{kb:N2}]" : $"[c/FFFF00:{kb:N2}]";
+                var t = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+
+                ChatHelper.DisplayMessageOnClient(NetworkText.FromKey("Mods.SSC.SaveSuccessful", c, t), Color.Green, from);
 
                 if (first)
                 {
@@ -188,7 +192,7 @@ public class SSC : Mod
                     }
                     finally
                     {
-                        ModContent.GetInstance<ViewSystem>().View?.SetState(null);
+                        ModContent.GetInstance<ServerSystem>().View?.SetState(null);
                     }
                 }
 

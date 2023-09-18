@@ -12,11 +12,11 @@ namespace SSC.Core;
 
 public class MessageManager : ModSystem
 {
-    internal static List<byte[]> MessageSegment;
+    internal static Dictionary<int, byte[]> MessageSegment;
 
     public override void Load()
     {
-        MessageSegment = new List<byte[]>(256); // [0,255]
+        MessageSegment = new Dictionary<int, byte[]>();
     }
 
     public static void SendMessage(ModPacket root, int to = -1, int ignore = -1)
@@ -27,8 +27,8 @@ public class MessageManager : ModSystem
         }
         else
         {
-            // My message -> 01-09-08, True message -> [XX-XX]-[FA]-[01]-01-09-08
-            // [XX-XX]-[FA]-[01]-XX-XX-XX-XX-Position-[XX-XX]-[FA]-[01]-01-09-08
+            // My message -> 01-09-08, True message -> [XX-XX]-[FA]-[ID]-01-09-08
+            // [XX-XX]-[FA]-[ID]-XX-XX-XX-XX-Position-[XX-XX]-[FA]-[ID]-01-09-08
             var data = ((MemoryStream)root.BaseStream).ToArray(); // 此时封装的Stream除了自身的数据外,开头还会有4字节的标志,以及更早的其他合并的数据流
             var hash = Convert.ToHexString(MD5.Create().ComputeHash(data)); // 将Stream原封不动的传输过去
 
@@ -74,19 +74,19 @@ public class MessageManager : ModSystem
         {
             var hash = reader.ReadString();
             var data = MessageSegment[from];
-            if (Convert.ToHexString(MD5.Create().ComputeHash(data)) != hash)
+            if (Convert.ToHexString(MD5.Create().ComputeHash(data.ToArray())) != hash)
             {
                 ChatHelper.DisplayMessageOnClient(NetworkText.FromLiteral("Hash校验失败,信息将被丢弃!"), Color.Red, from);
                 return;
             }
 
-            // data本身是完整的一段PacketStream,当然也包括前面的4字节用不到的标志.
+            // Message本身是完整的一段PacketStream,所以也包括前面的4字节TML自带的标识头.
             ModContent.GetInstance<SSC>().HandlePacket(new BinaryReader(new MemoryStream(data[4..])), from);
             return;
         }
 
-        var segment = reader.ReadBytes(reader.ReadInt32());
-        MessageSegment[from] = MessageSegment[from].Concat(segment).ToArray();
+        var root = reader.ReadBytes(reader.ReadInt32());
+        MessageSegment[from] = MessageSegment[from].Concat(root).ToArray();
     }
 
     public override void Unload()
