@@ -5,7 +5,7 @@ namespace SSC.Core;
 
 public class AdminCommand : ModCommand
 {
-    public override string Command => "SaveSSC";
+    public override string Command => "AdminCode";
     public override CommandType Type => CommandType.Console;
 
     public override void Action(CommandCaller caller, string input, string[] args)

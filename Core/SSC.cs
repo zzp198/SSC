@@ -94,8 +94,8 @@ public class SSC : Mod
                 File.WriteAllBytes(Path.Combine(PATH, MapID, id, $"{name}.plr"), data);
                 TagIO.ToFile(root, Path.Combine(PATH, MapID, id, $"{name}.tplr"));
 
-                var kb = data.Length + root.Count / 1024.0;
-                var c = kb > 64 ? $"[c/00FF00:{kb:N2}]" : $"[c/FFFF00:{kb:N2}]";
+                var b = data.Length + root.Count / 1024.0;
+                var c = b > 64 ? $"[c/00FF00:{b:N2}]" : $"[c/FFFF00:{b:N2}]";
                 var t = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
 
                 ChatHelper.DisplayMessageOnClient(NetworkText.FromKey("Mods.SSC.SaveSuccessful", c, t), Color.Green, from);
