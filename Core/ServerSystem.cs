@@ -11,22 +11,22 @@ namespace SSC.Core;
 
 public class ServerSystem : ModSystem
 {
-    public UserInterface View;
-    public uint Countdown;
+    internal UserInterface UI;
+    internal uint SaveCountdown;
 
     public override void Load()
     {
         if (!Main.dedServ)
         {
-            View = new UserInterface();
+            UI = new UserInterface();
         }
     }
 
     public override void UpdateUI(GameTime gameTime)
     {
-        if (View?.CurrentState != null)
+        if (UI?.CurrentState != null)
         {
-            View.Update(gameTime);
+            UI.Update(gameTime);
         }
     }
 
@@ -37,9 +37,9 @@ public class ServerSystem : ModSystem
         {
             layers.Insert(index, new LegacyGameInterfaceLayer("Vanilla: SSC", () =>
             {
-                if (View?.CurrentState != null)
+                if (UI?.CurrentState != null)
                 {
-                    View.Draw(Main.spriteBatch, Main.gameTimeCache);
+                    UI.Draw(Main.spriteBatch, Main.gameTimeCache);
                 }
 
                 return true;
@@ -77,20 +77,20 @@ public class ServerSystem : ModSystem
     public override void NetReceive(BinaryReader reader)
     {
         var root = TagIO.Read(reader);
-        (View?.CurrentState as PlayerState)?.Calc(root);
+        (UI?.CurrentState as PlayerState)?.Calc(root);
     }
 
     public override void PostUpdateEverything()
     {
-        if (Main.netMode != NetmodeID.MultiplayerClient)
+        if (Main.netMode != NetmodeID.MultiplayerClient || MarkSystem.AnyActiveDanger)
         {
             return;
         }
 
-        Countdown++;
-        if (Countdown > 3600)
+        SaveCountdown++;
+        if (SaveCountdown > 3600)
         {
-            Countdown = 0;
+            SaveCountdown = 0;
             if (Main.ActivePlayerFileData.Path.EndsWith(".SSC"))
             {
                 Player.SavePlayer(Main.ActivePlayerFileData);
@@ -100,6 +100,6 @@ public class ServerSystem : ModSystem
 
     public override void Unload()
     {
-        View = null;
+        UI = null;
     }
 }

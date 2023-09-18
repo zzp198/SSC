@@ -92,7 +92,7 @@ public class HookManager : ModSystem
             // 正常情况下不会拥有此标记,区别与Main.SSC,这个只会影响本地角色的保存,不会更改游戏流程
             file_data.MarkAsServerSide();
             file_data.SetAsActive();
-            ModContent.GetInstance<ServerSystem>().View?.SetState(new PlayerState()); // 唯一设置界面的地方
+            ModContent.GetInstance<ServerSystem>().UI?.SetState(new PlayerState()); // 唯一设置界面的地方
         });
     }
 
@@ -103,7 +103,7 @@ public class HookManager : ModSystem
         cur.GotoNext(MoveType.After, i => i.MatchCall(typeof(SystemLoader), nameof(SystemLoader.ModifyInterfaceLayers)));
         cur.EmitDelegate<Func<List<GameInterfaceLayer>, List<GameInterfaceLayer>>>(layers =>
         {
-            if (ModContent.GetInstance<ServerSystem>().View?.CurrentState != null)
+            if (ModContent.GetInstance<ServerSystem>().UI?.CurrentState != null)
             {
                 layers.ForEach(layer => layer.Active = layer.Name switch
                 {

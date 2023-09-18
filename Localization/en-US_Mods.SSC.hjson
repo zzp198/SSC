@@ -19,13 +19,13 @@ Configs: {
 
 		Password: {
 			Label: Password
-			Tooltip: Using the admin command on the console.
+			Tooltip: Using the "AdminCode" command on the console.
 		}
 	}
 }
 
 NameError: The username is invalid, please do not add any strange chars.
 PlayerVanity: The character defaults to classic styling, and you can customize it later on at the hairdresser or dressing table.
-SaveSuccessful: Successfully saved. Current archive size: {0} KB. Current time: {1}.
+SaveSuccessful: Successfully saved({0}). {1}.
 EraseSuccessful: Successfully deleted.
 RightDoubleClick: Right-double-click!

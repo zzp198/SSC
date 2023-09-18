@@ -94,11 +94,13 @@ public class SSC : Mod
                 File.WriteAllBytes(Path.Combine(PATH, MapID, id, $"{name}.plr"), data);
                 TagIO.ToFile(root, Path.Combine(PATH, MapID, id, $"{name}.tplr"));
 
-                var b = data.Length + root.Count / 1024.0;
-                var c = b > 64 ? $"[c/00FF00:{b:N2}]" : $"[c/FFFF00:{b:N2}]";
-                var t = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                var stream = new MemoryStream();
+                TagIO.ToStream(root, stream);
 
-                ChatHelper.DisplayMessageOnClient(NetworkText.FromKey("Mods.SSC.SaveSuccessful", c, t), Color.Green, from);
+                var KB = (data.LongLength + stream.Length) / 1024.0;
+                var size = KB < 64 ? $"[c/{Color.Green.Hex3()}:{KB:N2} KB]" : $"[c/{Color.Yellow.Hex3()}:{KB:N2} KB]";
+                var time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                ChatHelper.DisplayMessageOnClient(NetworkText.FromKey("Mods.SSC.SaveSuccessful", size, time), Color.Green, from);
 
                 if (first)
                 {
@@ -192,7 +194,7 @@ public class SSC : Mod
                     }
                     finally
                     {
-                        ModContent.GetInstance<ServerSystem>().View?.SetState(null);
+                        ModContent.GetInstance<ServerSystem>().UI?.SetState(null);
                     }
                 }
 
