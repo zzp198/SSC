@@ -21,10 +21,9 @@ public class HookManager : ModSystem
         IL_NetMessage.SendData += ILHook1;
         IL_MessageBuffer.GetData += ILHook2;
         IL_Main.DrawInterface += ILHook3;
-        IL_Main.DoUpdate_AutoSave += ILHook4;
         On_FileUtilities.Exists += OnHook1;
         On_FileUtilities.ReadAllBytes += OnHook2;
-        IL_Player.InternalSavePlayerFile += ILHook5;
+        IL_Player.InternalSavePlayerFile += ILHook4;
         On_Player.KillMeForGood += OnHook3;
     }
 
@@ -118,14 +117,6 @@ public class HookManager : ModSystem
         });
     }
 
-    // 缩短自动保存的间隔为60秒
-    void ILHook4(ILContext il)
-    {
-        var cur = new ILCursor(il);
-        cur.GotoNext(MoveType.After, i => i.MatchLdcI4(300000));
-        cur.EmitDelegate<Func<long, long>>(_ => 60000);
-    }
-
     // 放行特定的数据格式
     bool OnHook1(On_FileUtilities.orig_Exists func, string path, bool cloud)
     {
@@ -152,7 +143,7 @@ public class HookManager : ModSystem
 
     // 只有路径为.SSC结尾的SSC存档才会保存到云端,只需要控制SSC标志和路径后缀即可轻松区分.
     // 路径有三种,PS/[SteamID].plr,Create.SSC,PS/[SteamID].SSC
-    void ILHook5(ILContext il)
+    void ILHook4(ILContext il)
     {
         var cur = new ILCursor(il);
 
