@@ -1,11 +1,20 @@
 ﻿using System.Collections.Generic;
 using Terraria;
+using Terraria.ID;
 using Terraria.ModLoader;
 
 namespace SSC.Core;
 
 public class ServerPlayer : ModPlayer
 {
+    public override void OnEnterWorld()
+    {
+        if (Main.netMode == NetmodeID.SinglePlayer && ModContent.GetInstance<ServerConfig>().UITester)
+        {
+            ModContent.GetInstance<ServerSystem>().UI?.SetState(new ServerViewer()); // 唯一设置界面的地方
+        }
+    }
+
     public override IEnumerable<Item> AddStartingItems(bool mediumCoreDeath)
     {
         var items = new List<Item>();

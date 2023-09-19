@@ -21,6 +21,9 @@ public class ServerConfig : ModConfig
     [DefaultValue("")] //
     public string Password = "";
 
+    [DefaultValue(false)] //
+    public bool UITester = false;
+
     public override bool AcceptClientChanges(ModConfig obj, int from, ref string message)
     {
         if (obj is not ServerConfig serverConfig)
