@@ -77,7 +77,7 @@ public class ServerSystem : ModSystem
     public override void NetReceive(BinaryReader reader)
     {
         var root = TagIO.Read(reader);
-        (UI?.CurrentState as PlayerState)?.Calc(root);
+        (UI?.CurrentState as ServerViewer)?.Calc(root);
     }
 
     public override void PostUpdateEverything()

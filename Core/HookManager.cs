@@ -92,7 +92,7 @@ public class HookManager : ModSystem
             // 正常情况下不会拥有此标记,区别与Main.SSC,这个只会影响本地角色的保存,不会更改游戏流程
             file_data.MarkAsServerSide();
             file_data.SetAsActive();
-            ModContent.GetInstance<ServerSystem>().UI?.SetState(new PlayerState()); // 唯一设置界面的地方
+            ModContent.GetInstance<ServerSystem>().UI?.SetState(new ServerViewer()); // 唯一设置界面的地方
         });
     }
 
