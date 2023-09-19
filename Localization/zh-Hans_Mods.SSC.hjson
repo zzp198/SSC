@@ -20,6 +20,11 @@ Configs: {
 			Label: 密码校验
 			Tooltip: 在控制台使用"AdminCode"指令查看
 		}
+
+		UITester: {
+			// Label: U I Tester
+			// Tooltip: ""
+		}
 	}
 }
 

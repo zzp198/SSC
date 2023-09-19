@@ -21,6 +21,11 @@ Configs: {
 			Label: Password
 			Tooltip: Using the "AdminCode" command on the console.
 		}
+
+		UITester: {
+			Label: U I Tester
+			Tooltip: ""
+		}
 	}
 }
 
