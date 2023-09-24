@@ -2,6 +2,17 @@ Configs: {
 	ServerConfig: {
 		DisplayName: 服务端配置
 
+		AutoSaveCountdown: {
+			Label: 自动保存间隔
+			Tooltip:
+				'''
+				单位为秒,默认1分钟间隔,当值为0时禁用自动保存.
+				自动保存禁用时,只有[c/FF0000:死亡],[c/00FF00:正常退出游戏],或者使用[c/FFFF00:SSC命令]才可触发保存!
+				值过小会频繁触发保存,需要一定的带宽要求.
+				过大如果服务器宕机可能会丢失很多最近没来得及保存的物品.
+				'''
+		}
+
 		SaveForWorld: {
 			Label: 世界独立存档
 			Tooltip:
@@ -19,11 +30,6 @@ Configs: {
 		Password: {
 			Label: 密码校验
 			Tooltip: 在控制台使用"AdminCode"指令查看
-		}
-
-		UITester: {
-			// Label: U I Tester
-			// Tooltip: ""
 		}
 	}
 }

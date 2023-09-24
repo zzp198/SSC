@@ -2,6 +2,17 @@ Configs: {
 	ServerConfig: {
 		DisplayName: Server Config
 
+		AutoSaveCountdown: {
+			Label: Auto Save Countdown
+			Tooltip:
+				'''
+				The unit is seconds, with a default interval of 1 minute. When the value is 0, auto save will be disabled.
+				         When automatic save is disabled, only [c/FF0000:Death], [c/00FF00:Normal Exit Game], or [c/FFFF00:SSC Command] can trigger save!
+				         If the value is too small, it will frequently trigger saving, requiring a certain bandwidth requirement.
+				         If the server goes down, it may lose many items that have not been saved recently.
+				'''
+		}
+
 		SaveForWorld: {
 			Label: Save For World
 			Tooltip:
@@ -20,11 +31,6 @@ Configs: {
 		Password: {
 			Label: Password
 			Tooltip: Using the "AdminCode" command on the console.
-		}
-
-		UITester: {
-			Label: U I Tester
-			Tooltip: ""
 		}
 	}
 }

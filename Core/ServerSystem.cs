@@ -12,7 +12,7 @@ namespace SSC.Core;
 public class ServerSystem : ModSystem
 {
     internal UserInterface UI;
-    internal uint SaveCountdown;
+    internal uint Timer;
 
     public override void Load()
     {
@@ -87,14 +87,17 @@ public class ServerSystem : ModSystem
             return;
         }
 
-        SaveCountdown++;
-        if (SaveCountdown > 3600)
+        var AutoSaveCountdown = ModContent.GetInstance<ServerConfig>().AutoSaveCountdown;
+        if (AutoSaveCountdown == 0)
         {
-            SaveCountdown = 0;
-            if (Main.ActivePlayerFileData.Path.EndsWith(".SSC"))
-            {
-                Player.SavePlayer(Main.ActivePlayerFileData);
-            }
+            return;
+        }
+
+        Timer++;
+        if (Timer > AutoSaveCountdown * 60)
+        {
+            Timer = 0;
+            Player.SavePlayer(Main.ActivePlayerFileData);
         }
     }
 

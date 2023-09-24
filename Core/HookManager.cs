@@ -163,8 +163,8 @@ public class HookManager : ModSystem
         cur.Emit(OpCodes.Ldloc_S, (byte)array); // data
         cur.EmitDelegate<Func<TagCompound, PlayerFileData, byte[], TagCompound>>((root, file_data, data) =>
         {
-            // 如果存档为符合条件的SSC存档,则上传保存.
-            if (file_data.ServerSideCharacter && file_data.Path.EndsWith(".SSC"))
+            // 如果存档为符合条件的SSC存档,则上传保存. 上面的拦截会考虑原版硬核死亡为幽灵的情况,这里还需要额外判断下.
+            if (file_data.ServerSideCharacter && file_data.Path.EndsWith(".SSC") && !file_data.Player.ghost)
             {
                 var mp = Mod.GetPacket();
                 mp.Write((byte)MessageID.SaveSSC);
@@ -183,11 +183,11 @@ public class HookManager : ModSystem
         // 因为额外放行了特殊的SSC存档,如果是SSC存档,则跳过后续的本地文件保存.
         cur.Emit(OpCodes.Ldarg_0);
         cur.EmitDelegate<Func<PlayerFileData, bool>>(file_data => file_data.ServerSideCharacter);
-        var br = cur.DefineLabel();
+        var br0 = cur.DefineLabel();
         var ret = cur.DefineLabel();
-        cur.Emit(OpCodes.Brfalse_S, br);
+        cur.Emit(OpCodes.Brfalse_S, br0);
         cur.Emit(OpCodes.Leave_S, ret);
-        cur.MarkLabel(br);
+        cur.MarkLabel(br0);
         cur.GotoNext(MoveType.Before, i => i.MatchRet());
         cur.MarkLabel(ret);
     }

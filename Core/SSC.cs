@@ -31,7 +31,7 @@ public class SSC : Mod
         if (Main.dedServ)
         {
             Password = new Random().Next(0, 1000000).ToString("D6");
-            ModContent.GetInstance<AdminCommand>().Action(null, null, null);
+            ModContent.GetInstance<Commands.AdminCode>().Action(null, null, null);
         }
     }
 
@@ -214,6 +214,11 @@ public class SSC : Mod
                 }
 
                 NetMessage.TrySendData(Terraria.ID.MessageID.WorldData, from);
+                break;
+            }
+            case MessageID.ForceSaveSSC:
+            {
+                Player.SavePlayer(Main.ActivePlayerFileData);
                 break;
             }
             default:

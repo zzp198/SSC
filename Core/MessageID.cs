@@ -9,4 +9,6 @@ public enum MessageID : byte
     GoGoSSC, // 客户端->服务端,id,name.服务端->客户端,data,root.
 
     EraseSSC, // 客户端->服务端,id,name
+
+    ForceSaveSSC, // 服务端->客户端
 }

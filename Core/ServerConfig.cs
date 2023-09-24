@@ -9,6 +9,10 @@ public class ServerConfig : ModConfig
     public override ConfigScope Mode => ConfigScope.ServerSide;
 
     // [Header("")]
+    [DefaultValue(60)] //
+    [Range(0, int.MaxValue)]
+    public int AutoSaveCountdown = 60;
+
     [DefaultValue(false)] //
     [ReloadRequired]
     [BackgroundColor(255, 100, 100)]
@@ -21,9 +25,6 @@ public class ServerConfig : ModConfig
     [DefaultValue("")] //
     public string Password = "";
 
-    [DefaultValue(false)] //
-    public bool UITester = false;
-
     public override bool AcceptClientChanges(ModConfig obj, int from, ref string message)
     {
         if (obj is not ServerConfig serverConfig)
@@ -33,6 +34,8 @@ public class ServerConfig : ModConfig
 
         var flag = serverConfig.Password == SSC.Password;
         message = flag ? "配置保存成功." : "密码错误.";
+
+        serverConfig.Password = "";
         return flag;
     }
 

@@ -31,7 +31,7 @@ public class ServerViewer : UIState
 
     public override void OnActivate()
     {
-        Container = new UIKit.MovePanel
+        Container = new UIKit.SuperPanel
         {
             Width = new StyleDimension(370, 0),
             Height = new StyleDimension(600, 0),

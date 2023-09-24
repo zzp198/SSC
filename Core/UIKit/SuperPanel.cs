@@ -5,7 +5,7 @@ using Terraria.UI;
 
 namespace SSC.Core.UIKit;
 
-public class MovePanel : UIPanel
+public class SuperPanel : UIPanel
 {
     public bool Moving;
     public Vector2 MoveVector;
