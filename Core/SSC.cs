@@ -96,9 +96,10 @@ public class SSC : Mod
 
                 var stream = new MemoryStream();
                 TagIO.ToStream(root, stream);
+                stream.Flush();
 
                 var KB = (data.LongLength + stream.Length) / 1024.0;
-                var size = KB < 64 ? $"[c/{Color.Green.Hex3()}:{KB:N2} KB]" : $"[c/{Color.Yellow.Hex3()}:{KB:N2} KB]";
+                var size = $"[c/{(KB < 64 ? Color.Green.Hex3() : Color.Yellow.Hex3())}:{KB:N2} KB]";
                 var time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                 ChatHelper.DisplayMessageOnClient(NetworkText.FromKey("Mods.SSC.SaveSuccessful", size, time), Color.Green, from);
 

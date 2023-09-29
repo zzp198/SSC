@@ -57,8 +57,6 @@ public class MessageManager : ModSystem
             mp.Write(true);
             mp.Write(hash);
             mp.Send(to, ignore);
-
-            root.Close();
         }
     }
 

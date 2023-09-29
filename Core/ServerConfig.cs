@@ -39,6 +39,11 @@ public class ServerConfig : ModConfig
         return flag;
     }
 
+    public override void OnLoaded()
+    {
+        Password = "";
+    }
+
     public override void OnChanged()
     {
         Password = "";

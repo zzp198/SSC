@@ -163,7 +163,7 @@ public class HookManager : ModSystem
         cur.Emit(OpCodes.Ldloc_S, (byte)array); // data
         cur.EmitDelegate<Func<TagCompound, PlayerFileData, byte[], TagCompound>>((root, file_data, data) =>
         {
-            // 如果存档为符合条件的SSC存档,则上传保存. 上面的拦截会考虑原版硬核死亡为幽灵的情况,这里还需要额外判断下.
+            // 如果存档为符合条件的SSC存档,则上传保存. 上面的拦截不会考虑原版硬核死亡为幽灵的情况,这里还需要额外判断下.
             if (file_data.ServerSideCharacter && file_data.Path.EndsWith(".SSC") && !file_data.Player.ghost)
             {
                 var mp = Mod.GetPacket();
