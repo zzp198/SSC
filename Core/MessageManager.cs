@@ -21,6 +21,8 @@ public class MessageManager : ModSystem
 
     public static void SendMessage(ModPacket root, int to = -1, int ignore = -1)
     {
+        if (root == null) return;
+
         if (root.BaseStream.Position < 60000)
         {
             root.Send(to, ignore);

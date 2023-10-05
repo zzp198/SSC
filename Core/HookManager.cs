@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
+using System.Threading;
+using System.Threading.Tasks;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using Steamworks;
@@ -76,7 +78,8 @@ public class HookManager : ModSystem
             }
 
             // UUID会影响本地的map数据,同一个UUID的不同角色会拥有相同的地图探索
-            var file_data = new PlayerFileData(Path.Combine(Main.PlayerPath, $"{SteamUser.GetSteamID().m_SteamID}.plr"), false)
+            var file_data = new PlayerFileData(Path.Combine(Main.PlayerPath, $"{SteamUser.GetSteamID().m_SteamID}.plr"),
+                false)
             {
                 Metadata = FileMetadata.FromCurrentSettings(FileType.Player),
                 Player = new Player
@@ -100,7 +103,8 @@ public class HookManager : ModSystem
     void ILHook3(ILContext il)
     {
         var cur = new ILCursor(il);
-        cur.GotoNext(MoveType.After, i => i.MatchCall(typeof(SystemLoader), nameof(SystemLoader.ModifyInterfaceLayers)));
+        cur.GotoNext(MoveType.After,
+            i => i.MatchCall(typeof(SystemLoader), nameof(SystemLoader.ModifyInterfaceLayers)));
         cur.EmitDelegate<Func<List<GameInterfaceLayer>, List<GameInterfaceLayer>>>(layers =>
         {
             if (ModContent.GetInstance<ServerSystem>().UI?.CurrentState != null)
@@ -120,6 +124,11 @@ public class HookManager : ModSystem
     // 放行特定的数据格式
     bool OnHook1(On_FileUtilities.orig_Exists func, string path, bool cloud)
     {
+        if (path == null)
+        {
+            return false;
+        }
+
         return path.StartsWith("SSC@") || func(path, cloud);
     }
 
@@ -166,15 +175,20 @@ public class HookManager : ModSystem
             // 如果存档为符合条件的SSC存档,则上传保存. 上面的拦截不会考虑原版硬核死亡为幽灵的情况,这里还需要额外判断下.
             if (file_data.ServerSideCharacter && file_data.Path.EndsWith(".SSC") && !file_data.Player.ghost)
             {
-                var mp = Mod.GetPacket();
-                mp.Write((byte)MessageID.SaveSSC);
-                mp.Write(SteamUser.GetSteamID().m_SteamID.ToString());
-                mp.Write(file_data.Player.name);
-                mp.Write(data.Length);
-                mp.Write(data);
-                TagIO.Write(root, mp);
-                mp.Write(file_data.Path == "Create.SSC");
-                MessageManager.SendMessage(mp);
+                var threadStart = new ThreadStart(delegate
+                {
+                    var mp = Mod.GetPacket();
+                    mp.Write((byte)MessageID.SaveSSC);
+                    mp.Write(SteamUser.GetSteamID().m_SteamID.ToString());
+                    mp.Write(file_data.Player.name);
+                    mp.Write(data.Length);
+                    mp.Write(data);
+                    TagIO.Write(root, mp);
+                    mp.Write(file_data.Path == "Create.SSC");
+                    MessageManager.SendMessage(mp);
+                });
+                var thread = new Thread(threadStart);
+                thread.Start(); //多线程启动匿名方法
             }
 
             return root;
