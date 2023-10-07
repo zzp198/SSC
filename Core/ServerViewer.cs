@@ -100,25 +100,28 @@ public class ServerViewer : UIState
         NameSearchBar.OnContentsChanged += name => Dummy.name = name;
         CharacterCreationPanel.Append(NameSearchBar);
 
-        CharacterCreationPanel.Append(new UIDifficultyButton(Dummy, Lang.menu[26], null, PlayerDifficultyID.SoftCore, Color.Cyan)
-        {
-            Width = new StyleDimension(-5, 0.5f),
-            Height = new StyleDimension(26, 0),
-            Top = new StyleDimension(50, 0)
-        });
-        CharacterCreationPanel.Append(new UIDifficultyButton(Dummy, Lang.menu[25], null, PlayerDifficultyID.MediumCore, Main.mcColor)
-        {
-            Width = new StyleDimension(-5, 0.5f),
-            Height = new StyleDimension(26, 0),
-            Top = new StyleDimension(50, 0),
-            Left = new StyleDimension(5, 0.5f)
-        });
-        CharacterCreationPanel.Append(new UIDifficultyButton(Dummy, Lang.menu[24], null, PlayerDifficultyID.Hardcore, Main.hcColor)
-        {
-            Width = new StyleDimension(-5, 0.5f),
-            Height = new StyleDimension(26, 0),
-            Top = new StyleDimension(80, 0)
-        });
+        CharacterCreationPanel.Append(
+            new UIDifficultyButton(Dummy, Lang.menu[26], null, PlayerDifficultyID.SoftCore, Color.Cyan)
+            {
+                Width = new StyleDimension(-5, 0.5f),
+                Height = new StyleDimension(26, 0),
+                Top = new StyleDimension(50, 0)
+            });
+        CharacterCreationPanel.Append(
+            new UIDifficultyButton(Dummy, Lang.menu[25], null, PlayerDifficultyID.MediumCore, Main.mcColor)
+            {
+                Width = new StyleDimension(-5, 0.5f),
+                Height = new StyleDimension(26, 0),
+                Top = new StyleDimension(50, 0),
+                Left = new StyleDimension(5, 0.5f)
+            });
+        CharacterCreationPanel.Append(
+            new UIDifficultyButton(Dummy, Lang.menu[24], null, PlayerDifficultyID.Hardcore, Main.hcColor)
+            {
+                Width = new StyleDimension(-5, 0.5f),
+                Height = new StyleDimension(26, 0),
+                Top = new StyleDimension(80, 0)
+            });
         CharacterCreationPanel.Append(new UIDifficultyButton(Dummy, Language.GetText("UI.Creative"), null,
             PlayerDifficultyID.Creative, Main.creativeModeColor)
         {
@@ -152,7 +155,9 @@ public class ServerViewer : UIState
 
             Character.name = Dummy.name;
             Character.difficulty = Dummy.difficulty;
-            var invoke = typeof(UICharacterCreation).GetMethod("SetupPlayerStatsAndInventoryBasedOnDifficulty", (BindingFlags)36);
+            var invoke =
+                typeof(UICharacterCreation).GetMethod("SetupPlayerStatsAndInventoryBasedOnDifficulty",
+                    (BindingFlags)36);
             invoke?.Invoke(CharacterCreation, Array.Empty<object>());
 
             var data = new PlayerFileData("Create.SSC", false)
@@ -161,7 +166,8 @@ public class ServerViewer : UIState
             };
             data.MarkAsServerSide();
 
-            var SavePlayer = typeof(Player).GetMethod("InternalSavePlayerFile", BindingFlags.NonPublic | BindingFlags.Static);
+            var SavePlayer =
+                typeof(Player).GetMethod("InternalSavePlayerFile", BindingFlags.NonPublic | BindingFlags.Static);
             FileUtilities.ProtectedInvoke(() => SavePlayer?.Invoke(null, new object[] { data }));
 
             NameSearchBar.SetContents("");
@@ -253,7 +259,7 @@ public class ServerViewer : UIState
                 mp.Write((byte)MessageID.GoGoSSC);
                 mp.Write(SteamUser.GetSteamID().m_SteamID.ToString());
                 mp.Write(tag.GetString("name"));
-                MessageManager.SendMessage(mp);
+                mp.Send();
             };
             itemPlayButton.OnUpdate += _ =>
             {
@@ -274,13 +280,14 @@ public class ServerViewer : UIState
                 mp.Write((byte)MessageID.EraseSSC);
                 mp.Write(SteamUser.GetSteamID().m_SteamID.ToString());
                 mp.Write(tag.Get<string>("name"));
-                MessageManager.SendMessage(mp);
+                mp.Send();
             };
             itemDeleteButton.OnUpdate += _ =>
             {
                 if (itemDeleteButton.IsMouseHovering)
                 {
-                    Main.instance.MouseText($"{Language.GetTextValue("UI.Delete")} ({Language.GetTextValue("Mods.SSC.RightDoubleClick")})");
+                    Main.instance.MouseText(
+                        $"{Language.GetTextValue("UI.Delete")} ({Language.GetTextValue("Mods.SSC.RightDoubleClick")})");
                 }
             };
             item.Append(itemDeleteButton);

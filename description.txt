@@ -1,4 +1,6 @@
-SSC - Server Side Character for 1.4.4
+[h1]SSC - Server Side Character for 1.4.4[h1]
+
+[h2]注意: 如果遇到PacketTooLarge的报错,请启用TryFixPacketTooLarge模组.[h2]
 
 存档保存位置: [我的文档]\My Games\Terraria\tModLoader\SSC\(MapID)\[SteamID]\[Player]
 1. 纯数字文件夹为玩家存档,里面的角色可以在任何非独立世界使用.
@@ -12,6 +14,9 @@ SSC - Server Side Character for 1.4.4
 例如:无限加点系统,配合随着BOSS的推进,后面的BOSS会获得更多的动态属性提升.(甚至多人BOSS战禁止复活!)
 
 [更新日志]
+2023.10.7
+移除信息分段机制,现在独立为无代码侵入的修补模组.
+
 2023.10.5
 修复与灾厄创建地图的兼容问题.
 保存修改为线程模式,避免保存时暂停游戏的情况.

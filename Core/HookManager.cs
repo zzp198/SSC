@@ -3,7 +3,6 @@ using System.Collections.Generic;
 using System.IO;
 using System.Text.RegularExpressions;
 using System.Threading;
-using System.Threading.Tasks;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using Steamworks;
@@ -185,7 +184,7 @@ public class HookManager : ModSystem
                     mp.Write(data);
                     TagIO.Write(root, mp);
                     mp.Write(file_data.Path == "Create.SSC");
-                    MessageManager.SendMessage(mp);
+                    mp.Send();
                 });
                 var thread = new Thread(threadStart);
                 thread.Start(); //多线程启动匿名方法
@@ -216,7 +215,7 @@ public class HookManager : ModSystem
             mp.Write((byte)MessageID.EraseSSC);
             mp.Write(SteamUser.GetSteamID().m_SteamID.ToString());
             mp.Write(file_data.Player.name);
-            MessageManager.SendMessage(mp);
+            mp.Send();
         }
 
         func(player);

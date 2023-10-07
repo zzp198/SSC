@@ -22,7 +22,7 @@ public class SSC : ModCommand
             {
                 var mp = Mod.GetPacket();
                 mp.Write((byte)MessageID.ForceSaveSSC);
-                MessageManager.SendMessage(mp);
+                mp.Send();
                 break;
             }
         }

@@ -17,7 +17,11 @@ public class SSC : Mod
 {
     // SSC/([MapID:xxx-x-xxx])/[SteamID:0-9]/zzp198.plr
     public static string PATH => Path.Combine(Main.SavePath, nameof(SSC));
-    public static string MapID => ModContent.GetInstance<ServerConfig>().SaveForWorld ? $"{Main.ActiveWorldFileData.UniqueId}" : "";
+
+    public static string MapID => ModContent.GetInstance<ServerConfig>().SaveForWorld
+        ? $"{Main.ActiveWorldFileData.UniqueId}"
+        : "";
+
     public static string Password = "";
 
     public override void Load()
@@ -40,11 +44,6 @@ public class SSC : Mod
         var msg = reader.ReadByte();
         switch ((MessageID)msg)
         {
-            case MessageID.MessageSegment:
-            {
-                MessageManager.ReceiveMessage(reader, from);
-                break;
-            }
             case MessageID.SaveSSC:
             {
                 //只有服务端会执行,from必为客户端的id
@@ -101,7 +100,8 @@ public class SSC : Mod
                 var KB = (data.LongLength + stream.Length) / 1024.0;
                 var size = $"[c/{(KB < 64 ? Color.Green.Hex3() : Color.Yellow.Hex3())}:{KB:N2} KB]";
                 var time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                ChatHelper.DisplayMessageOnClient(NetworkText.FromKey("Mods.SSC.SaveSuccessful", size, time), Color.Green, from);
+                ChatHelper.DisplayMessageOnClient(NetworkText.FromKey("Mods.SSC.SaveSuccessful", size, time),
+                    Color.Green, from);
 
                 if (first)
                 {
@@ -129,13 +129,15 @@ public class SSC : Mod
                     // 进行基础的校验,如禁止旅行角色进入非旅行世界,以及其他mod进入限制.
                     if (file_data.Player.difficulty == PlayerDifficultyID.Creative && !Main.GameModeInfo.IsJourneyMode)
                     {
-                        ChatHelper.DisplayMessageOnClient(NetworkText.FromKey("Net.PlayerIsCreativeAndWorldIsNotCreative"), Color.Red, from);
+                        ChatHelper.DisplayMessageOnClient(
+                            NetworkText.FromKey("Net.PlayerIsCreativeAndWorldIsNotCreative"), Color.Red, from);
                         return;
                     }
 
                     if (file_data.Player.difficulty != PlayerDifficultyID.Creative && Main.GameModeInfo.IsJourneyMode)
                     {
-                        ChatHelper.DisplayMessageOnClient(NetworkText.FromKey("Net.PlayerIsNotCreativeAndWorldIsCreative"), Color.Red, from);
+                        ChatHelper.DisplayMessageOnClient(
+                            NetworkText.FromKey("Net.PlayerIsNotCreativeAndWorldIsCreative"), Color.Red, from);
                         return;
                     }
 
@@ -155,7 +157,7 @@ public class SSC : Mod
                     mp.Write(data.Length);
                     mp.Write(data);
                     TagIO.Write(root, mp);
-                    MessageManager.SendMessage(mp, from);
+                    mp.Send(from);
 
                     // 根据客户端的挂载数据来同步到服务端,不添加的话,离开时的提示信息有误且后进的玩家无法被先进的玩家看到(虽然死亡能解除)
                     NetMessage.SendData(Terraria.ID.MessageID.PlayerInfo, from);
@@ -175,23 +177,27 @@ public class SSC : Mod
                     var remote_file_data = Player.LoadPlayer(binary, false);
 
                     // 需要修改file_data的Path为SSC以开启云存档,同时注意继承PlayTime,否则新档会丢失游玩时间.
-                    var file_data = new PlayerFileData(Path.Combine(Main.PlayerPath, $"{SteamUser.GetSteamID().m_SteamID}.SSC"), false)
-                    {
-                        Metadata = FileMetadata.FromCurrentSettings(FileType.Player),
-                        Player = remote_file_data.Player
-                    };
+                    var file_data =
+                        new PlayerFileData(Path.Combine(Main.PlayerPath, $"{SteamUser.GetSteamID().m_SteamID}.SSC"),
+                            false)
+                        {
+                            Metadata = FileMetadata.FromCurrentSettings(FileType.Player),
+                            Player = remote_file_data.Player
+                        };
                     file_data.SetPlayTime(remote_file_data.GetPlayTime());
                     file_data.MarkAsServerSide();
                     file_data.SetAsActive();
 
-                    file_data.Player.Spawn(PlayerSpawnContext.SpawningIntoWorld); // SetPlayerDataToOutOfClassFields,设置临时物品
+                    file_data.Player.Spawn(PlayerSpawnContext
+                        .SpawningIntoWorld); // SetPlayerDataToOutOfClassFields,设置临时物品
                     try
                     {
                         Player.Hooks.EnterWorld(Main.myPlayer); // 其他mod如果没有防御性编程可能会报错
                     }
                     catch (Exception e)
                     {
-                        ChatHelper.DisplayMessageOnClient(NetworkText.FromLiteral(e.ToString()), Color.Red, Main.myPlayer);
+                        ChatHelper.DisplayMessageOnClient(NetworkText.FromLiteral(e.ToString()), Color.Red,
+                            Main.myPlayer);
                     }
                     finally
                     {
@@ -211,7 +217,8 @@ public class SSC : Mod
                 {
                     File.Delete(Path.Combine(PATH, MapID, id, $"{name}.plr"));
                     File.Delete(Path.Combine(PATH, MapID, id, $"{name}.tplr"));
-                    ChatHelper.SendChatMessageToClient(NetworkText.FromKey("Mods.SSC.EraseSuccessful"), Color.Yellow, from);
+                    ChatHelper.SendChatMessageToClient(NetworkText.FromKey("Mods.SSC.EraseSuccessful"), Color.Yellow,
+                        from);
                 }
 
                 NetMessage.TrySendData(Terraria.ID.MessageID.WorldData, from);
