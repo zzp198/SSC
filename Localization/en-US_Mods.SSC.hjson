@@ -2,8 +2,8 @@ Configs: {
 	ServerConfig: {
 		DisplayName: Server Config
 
-		AutoSaveCountdown: {
-			Label: Auto Save Countdown
+		AutoSaveInterval: {
+			Label: Auto Save Interval
 			Tooltip:
 				'''
 				The unit is seconds, with a default interval of 1 minute. When the value is 0, auto save will be disabled.
@@ -13,7 +13,7 @@ Configs: {
 				'''
 		}
 
-		SaveForWorld: {
+		Save4World: {
 			Label: Save For World
 			Tooltip:
 				'''

@@ -2,7 +2,7 @@ Configs: {
 	ServerConfig: {
 		DisplayName: 服务端配置
 
-		AutoSaveCountdown: {
+		AutoSaveInterval: {
 			Label: 自动保存间隔
 			Tooltip:
 				'''
@@ -13,7 +13,7 @@ Configs: {
 				'''
 		}
 
-		SaveForWorld: {
+		Save4World: {
 			Label: 世界独立存档
 			Tooltip:
 				'''

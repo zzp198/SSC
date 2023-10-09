@@ -87,14 +87,14 @@ public class ServerSystem : ModSystem
             return;
         }
 
-        var AutoSaveCountdown = ModContent.GetInstance<ServerConfig>().AutoSaveCountdown;
-        if (AutoSaveCountdown == 0)
+        var AutoSaveInterval = ModContent.GetInstance<ServerConfig>().AutoSaveInterval;
+        if (AutoSaveInterval == 0)
         {
             return;
         }
 
         Timer++;
-        if (Timer > AutoSaveCountdown * 60)
+        if (Timer > AutoSaveInterval * 60)
         {
             Timer = 0;
             Player.SavePlayer(Main.ActivePlayerFileData);

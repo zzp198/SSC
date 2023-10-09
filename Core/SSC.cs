@@ -18,9 +18,8 @@ public class SSC : Mod
     // SSC/([MapID:xxx-x-xxx])/[SteamID:0-9]/zzp198.plr
     public static string PATH => Path.Combine(Main.SavePath, nameof(SSC));
 
-    public static string MapID => ModContent.GetInstance<ServerConfig>().SaveForWorld
-        ? $"{Main.ActiveWorldFileData.UniqueId}"
-        : "";
+    public static string MapID =>
+        ModContent.GetInstance<ServerConfig>().Save4World ? $"{Main.ActiveWorldFileData.UniqueId}" : "";
 
     public static string Password = "";
 
@@ -44,6 +43,11 @@ public class SSC : Mod
         var msg = reader.ReadByte();
         switch ((MessageID)msg)
         {
+            case MessageID.MessageSegment:
+            {
+                MessageManager.ProcessMessage(reader, from);
+                break;
+            }
             case MessageID.SaveSSC:
             {
                 //只有服务端会执行,from必为客户端的id
@@ -157,8 +161,9 @@ public class SSC : Mod
                     mp.Write(data.Length);
                     mp.Write(data);
                     TagIO.Write(root, mp);
-                    mp.Send(from);
+                    MessageManager.FrameSend(mp, from);
 
+                    // 这里需要确保先收到全部Message并挂载,再收到PlayerInfo来同步信息.
                     // 根据客户端的挂载数据来同步到服务端,不添加的话,离开时的提示信息有误且后进的玩家无法被先进的玩家看到(虽然死亡能解除)
                     NetMessage.SendData(Terraria.ID.MessageID.PlayerInfo, from);
 
@@ -188,8 +193,7 @@ public class SSC : Mod
                     file_data.MarkAsServerSide();
                     file_data.SetAsActive();
 
-                    file_data.Player.Spawn(PlayerSpawnContext
-                        .SpawningIntoWorld); // SetPlayerDataToOutOfClassFields,设置临时物品
+                    file_data.Player.Spawn(PlayerSpawnContext.SpawningIntoWorld);
                     try
                     {
                         Player.Hooks.EnterWorld(Main.myPlayer); // 其他mod如果没有防御性编程可能会报错
@@ -222,11 +226,6 @@ public class SSC : Mod
                 }
 
                 NetMessage.TrySendData(Terraria.ID.MessageID.WorldData, from);
-                break;
-            }
-            case MessageID.ForceSaveSSC:
-            {
-                Player.SavePlayer(Main.ActivePlayerFileData);
                 break;
             }
             default:

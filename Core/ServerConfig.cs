@@ -10,13 +10,13 @@ public class ServerConfig : ModConfig
 
     // [Header("")]
     [DefaultValue(60)] //
-    [Range(0, int.MaxValue)]
-    public int AutoSaveCountdown = 60;
+    [Range(10, int.MaxValue)]
+    public int AutoSaveInterval = 60;
 
     [DefaultValue(false)] //
     [ReloadRequired]
     [BackgroundColor(255, 100, 100)]
-    public bool SaveForWorld = false;
+    public bool Save4World = false;
 
     [DefaultListValue(1)] //
     [Expand(false)]
