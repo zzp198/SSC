@@ -155,9 +155,7 @@ public class ServerViewer : UIState
 
             Character.name = Dummy.name;
             Character.difficulty = Dummy.difficulty;
-            var invoke =
-                typeof(UICharacterCreation).GetMethod("SetupPlayerStatsAndInventoryBasedOnDifficulty",
-                    (BindingFlags)36);
+            var invoke = typeof(UICharacterCreation).GetMethod("SetupPlayerStatsAndInventoryBasedOnDifficulty", (BindingFlags)36);
             invoke?.Invoke(CharacterCreation, Array.Empty<object>());
 
             var data = new PlayerFileData("Create.SSC", false)
@@ -166,8 +164,7 @@ public class ServerViewer : UIState
             };
             data.MarkAsServerSide();
 
-            var SavePlayer =
-                typeof(Player).GetMethod("InternalSavePlayerFile", BindingFlags.NonPublic | BindingFlags.Static);
+            var SavePlayer = typeof(Player).GetMethod("InternalSavePlayerFile", BindingFlags.NonPublic | BindingFlags.Static);
             FileUtilities.ProtectedInvoke(() => SavePlayer?.Invoke(null, new object[] { data }));
 
             NameSearchBar.SetContents("");

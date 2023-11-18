@@ -1,5 +1,6 @@
 ﻿using System.Collections.Generic;
 using System.ComponentModel;
+using Terraria.Localization;
 using Terraria.ModLoader.Config;
 
 namespace SSC.Core;
@@ -10,7 +11,7 @@ public class ServerConfig : ModConfig
 
     // [Header("")]
     [DefaultValue(60)] //
-    [Range(1, int.MaxValue)]
+    [Range(20, int.MaxValue)]
     public int AutoSave = 60;
 
     [DefaultValue(false)] //
@@ -25,7 +26,7 @@ public class ServerConfig : ModConfig
     [DefaultValue("")] //
     public string Password = "";
 
-    public override bool AcceptClientChanges(ModConfig obj, int from, ref string message)
+    public override bool AcceptClientChanges(ModConfig obj, int whoAmI, ref NetworkText message)
     {
         if (obj is not ServerConfig serverConfig)
         {
@@ -33,7 +34,7 @@ public class ServerConfig : ModConfig
         }
 
         var flag = serverConfig.Password == SSC.Password;
-        message = flag ? "配置保存成功." : "密码错误.";
+        message = flag ? NetworkText.FromLiteral("配置保存成功.") : NetworkText.FromLiteral("密码错误.");
 
         serverConfig.Password = "";
         return flag;
