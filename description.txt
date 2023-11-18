@@ -1,4 +1,4 @@
-[h1]SSC - Server Side Character[h1]
+[h1]SSC - Server Side Character[/h1]
 
 存档保存位置: [我的文档]\My Games\Terraria\tModLoader\SSC\(MapID)\[SteamID]\[Player]
 1. 纯数字文件夹为玩家存档,里面的角色可以在任何非独立世界使用.
