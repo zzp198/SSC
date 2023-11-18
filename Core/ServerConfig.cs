@@ -10,8 +10,8 @@ public class ServerConfig : ModConfig
 
     // [Header("")]
     [DefaultValue(60)] //
-    [Range(10, int.MaxValue)]
-    public int AutoSaveInterval = 60;
+    [Range(1, int.MaxValue)]
+    public int AutoSave = 60;
 
     [DefaultValue(false)] //
     [ReloadRequired]

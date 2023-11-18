@@ -13,6 +13,11 @@ Configs: {
 				'''
 		}
 
+		AutoSave: {
+			Label: Auto Save
+			Tooltip: ""
+		}
+
 		Save4World: {
 			Label: Save For World
 			Tooltip:

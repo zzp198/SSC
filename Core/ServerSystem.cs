@@ -1,5 +1,8 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.IO;
+using System.Reflection;
+using System.Threading.Tasks;
 using Microsoft.Xna.Framework;
 using Terraria;
 using Terraria.ID;
@@ -13,6 +16,7 @@ public class ServerSystem : ModSystem
 {
     internal UserInterface UI;
     internal uint Timer;
+    internal Task SaveTask;
 
     public override void Load()
     {
@@ -80,6 +84,8 @@ public class ServerSystem : ModSystem
         (UI?.CurrentState as ServerViewer)?.Calc(root);
     }
 
+    MethodInfo InternalSave = typeof(Player).GetMethod("InternalSavePlayerFile", (BindingFlags)40);
+
     public override void PostUpdateEverything()
     {
         if (Main.netMode != NetmodeID.MultiplayerClient || MarkSystem.AnyActiveDanger)
@@ -87,17 +93,16 @@ public class ServerSystem : ModSystem
             return;
         }
 
-        var AutoSaveInterval = ModContent.GetInstance<ServerConfig>().AutoSaveInterval;
-        if (AutoSaveInterval == 0)
-        {
-            return;
-        }
+        var AutoSave = ModContent.GetInstance<ServerConfig>().AutoSave;
 
         Timer++;
-        if (Timer > AutoSaveInterval * 60)
+        if (Timer > AutoSave * 60)
         {
             Timer = 0;
-            Player.SavePlayer(Main.ActivePlayerFileData);
+            if (SaveTask == null || SaveTask.Status != TaskStatus.Running)
+            {
+                SaveTask = Task.Run(() => { InternalSave.Invoke(null, new object[] { Main.ActivePlayerFileData }); });
+            }
         }
     }
 

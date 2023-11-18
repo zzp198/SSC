@@ -182,13 +182,11 @@ public class SSC : Mod
                     var remote_file_data = Player.LoadPlayer(binary, false);
 
                     // 需要修改file_data的Path为SSC以开启云存档,同时注意继承PlayTime,否则新档会丢失游玩时间.
-                    var file_data =
-                        new PlayerFileData(Path.Combine(Main.PlayerPath, $"{SteamUser.GetSteamID().m_SteamID}.SSC"),
-                            false)
-                        {
-                            Metadata = FileMetadata.FromCurrentSettings(FileType.Player),
-                            Player = remote_file_data.Player
-                        };
+                    var file_data = new PlayerFileData(Path.Combine(Main.PlayerPath, $"{SteamUser.GetSteamID().m_SteamID}.SSC"), false)
+                    {
+                        Metadata = FileMetadata.FromCurrentSettings(FileType.Player),
+                        Player = remote_file_data.Player
+                    };
                     file_data.SetPlayTime(remote_file_data.GetPlayTime());
                     file_data.MarkAsServerSide();
                     file_data.SetAsActive();
