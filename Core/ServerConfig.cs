@@ -11,7 +11,7 @@ public class ServerConfig : ModConfig
 
     // [Header("")]
     [DefaultValue(60)] //
-    [Range(20, int.MaxValue)]
+    [Range(10, int.MaxValue)]
     public int AutoSave = 60;
 
     [DefaultValue(false)] //
