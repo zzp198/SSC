@@ -1,8 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.IO;
-using System.Reflection;
-using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
@@ -26,7 +24,7 @@ public class HookManager : ModSystem
         IL_Main.DrawInterface += ILHook3;
         On_FileUtilities.Exists += OnHook1;
         On_FileUtilities.ReadAllBytes += OnHook2;
-        On_Player.InternalSavePlayerFile += OnHook3;
+        On_Player.SavePlayerFile_Write += OnHook3;
         On_Player.KillMeForGood += OnHook4;
     }
 
@@ -113,7 +111,8 @@ public class HookManager : ModSystem
     void ILHook3(ILContext il)
     {
         var cur = new ILCursor(il);
-        cur.GotoNext(MoveType.After, i => i.MatchCall(typeof(SystemLoader), nameof(SystemLoader.ModifyInterfaceLayers)));
+        cur.GotoNext(MoveType.After,
+            i => i.MatchCall(typeof(SystemLoader), nameof(SystemLoader.ModifyInterfaceLayers)));
         cur.EmitDelegate<Func<List<GameInterfaceLayer>, List<GameInterfaceLayer>>>(layers =>
         {
             if (ModContent.GetInstance<ServerSystem>().UI?.CurrentState != null)
@@ -161,15 +160,10 @@ public class HookManager : ModSystem
 
     // 只有路径为.SSC结尾的SSC存档才会保存到云端,只需要控制SSC标志和路径后缀即可轻松区分.
     // 路径有三种,PS/[SteamID].plr,Create.SSC,PS/[SteamID].SSC
-    void OnHook3(On_Player.orig_InternalSavePlayerFile orig, PlayerFileData fileData)
+    void OnHook3(On_Player.orig_InternalSavePlayerFile orig, PlayerFileData fileData, byte[] plr, TagCompound tplr)
     {
-        // TODO 如果原生支持获取PLR就更好了,不然新版本可能因为存档结构变动寄寄.
-        // TODO 缓存机制
         if (fileData.ServerSideCharacter && fileData.Path.EndsWith("SSC"))
         {
-            var plr = GetPLR(fileData);
-            var tplr = GetTPLR(fileData);
-
             var mp = Mod.GetPacket();
             mp.Write((byte)MessageID.SaveSSC);
             mp.Write(SteamUser.GetSteamID().m_SteamID.ToString());
@@ -184,38 +178,6 @@ public class HookManager : ModSystem
         }
 
         orig(fileData);
-    }
-
-    byte[] ENC_KEY = (byte[])typeof(Player).GetField("ENCRYPTION_KEY", (BindingFlags)40)!.GetValue(null);
-    MethodInfo PlayerSerialize = typeof(Player).GetMethod("Serialize", (BindingFlags)40);
-
-    byte[] GetPLR(PlayerFileData fileData)
-    {
-        var rijndaelManaged = new RijndaelManaged();
-        using (var stream = new MemoryStream(2000))
-        {
-            using (var output = new CryptoStream(stream, rijndaelManaged.CreateEncryptor(ENC_KEY, ENC_KEY), CryptoStreamMode.Write))
-            {
-                using (var binaryWriter = new BinaryWriter(output))
-                {
-                    PlayerLoader.PreSavePlayer(fileData.Player);
-                    binaryWriter.Write(279);
-                    fileData.Metadata.Write(binaryWriter);
-                    PlayerSerialize.Invoke(null, new object[] { fileData, fileData.Player, binaryWriter });
-                    binaryWriter.Flush();
-                    output.FlushFinalBlock();
-                    stream.Flush();
-                    PlayerLoader.PostSavePlayer(fileData.Player);
-                    return stream.ToArray();
-                }
-            }
-        }
-    }
-
-    TagCompound GetTPLR(PlayerFileData fileData)
-    {
-        var SaveData = Assembly.Load("tModLoader").GetType("Terraria.ModLoader.IO.PlayerIO")!.GetMethod("SaveData", (BindingFlags)40);
-        return (TagCompound)SaveData!.Invoke(null, new object[] { fileData.Player });
     }
 
     // 硬核死亡删除云存档

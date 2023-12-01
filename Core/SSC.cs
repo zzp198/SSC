@@ -178,16 +178,12 @@ public class SSC : Mod
                     var memoryStream = new MemoryStream();
                     TagIO.ToStream(root, memoryStream);
 
-                    var binary = $"SSC@{Convert.ToHexString(data)}@{Convert.ToHexString(memoryStream.ToArray())}@.plr";
-                    var remote_file_data = Player.LoadPlayer(binary, false);
-
                     // 需要修改file_data的Path为SSC以开启云存档,同时注意继承PlayTime,否则新档会丢失游玩时间.
                     var file_data = new PlayerFileData(Path.Combine(Main.PlayerPath, $"{SteamUser.GetSteamID().m_SteamID}.SSC"), false)
-                    {
-                        Metadata = FileMetadata.FromCurrentSettings(FileType.Player),
-                        Player = remote_file_data.Player
-                    };
-                    file_data.SetPlayTime(remote_file_data.GetPlayTime());
+                        {
+                            Metadata = FileMetadata.FromCurrentSettings(FileType.Player),
+                        };
+                    Player.LoadPlayerFromStream(file_data, data, memoryStream.ToArray());// data中包含playtime并且会添加到file_data里
                     file_data.MarkAsServerSide();
                     file_data.SetAsActive();
 
@@ -198,7 +194,8 @@ public class SSC : Mod
                     }
                     catch (Exception e)
                     {
-                        ChatHelper.DisplayMessageOnClient(NetworkText.FromLiteral(e.ToString()), Color.Red, Main.myPlayer);
+                        ChatHelper.DisplayMessageOnClient(NetworkText.FromLiteral(e.ToString()), Color.Red,
+                            Main.myPlayer);
                     }
                     finally
                     {
@@ -218,7 +215,8 @@ public class SSC : Mod
                 {
                     File.Delete(Path.Combine(PATH, MapID, id, $"{name}.plr"));
                     File.Delete(Path.Combine(PATH, MapID, id, $"{name}.tplr"));
-                    ChatHelper.SendChatMessageToClient(NetworkText.FromKey("Mods.SSC.EraseSuccessful"), Color.Yellow, from);
+                    ChatHelper.SendChatMessageToClient(NetworkText.FromKey("Mods.SSC.EraseSuccessful"), Color.Yellow,
+                        from);
                 }
 
                 NetMessage.TrySendData(Terraria.ID.MessageID.WorldData, from);
@@ -242,4 +240,15 @@ public class SSC : Mod
             }
         }
     }
+}
+
+public enum MessageID : byte
+{
+    MessageSegment,
+
+    SaveSSC, // 客户端->服务端,id,name,data,root,first
+
+    GoGoSSC, // 客户端->服务端,id,name.服务端->客户端,data,root.
+
+    EraseSSC, // 客户端->服务端,id,name
 }
