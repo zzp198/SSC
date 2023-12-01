@@ -24,7 +24,7 @@ public class HookManager : ModSystem
         IL_Main.DrawInterface += ILHook3;
         On_FileUtilities.Exists += OnHook1;
         On_FileUtilities.ReadAllBytes += OnHook2;
-        On_Player.SavePlayerFile_Write += OnHook3;
+        On_Player.SavePlayerFile_Write += OnHook3; // TODO ,其他都已经实现，就等着新版本更新On，直接编译就能适应新版本
         On_Player.KillMeForGood += OnHook4;
     }
 
