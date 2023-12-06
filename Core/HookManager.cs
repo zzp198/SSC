@@ -113,7 +113,8 @@ public class HookManager : ModSystem
     void ILHook3(ILContext il)
     {
         var cur = new ILCursor(il);
-        cur.GotoNext(MoveType.After, i => i.MatchCall(typeof(SystemLoader), nameof(SystemLoader.ModifyInterfaceLayers)));
+        cur.GotoNext(MoveType.After,
+            i => i.MatchCall(typeof(SystemLoader), nameof(SystemLoader.ModifyInterfaceLayers)));
         cur.EmitDelegate<Func<List<GameInterfaceLayer>, List<GameInterfaceLayer>>>(layers =>
         {
             if (ModContent.GetInstance<ServerSystem>().UI?.CurrentState != null)
@@ -163,22 +164,28 @@ public class HookManager : ModSystem
     // 路径有三种,PS/[SteamID].plr,Create.SSC,PS/[SteamID].SSC
     void OnHook3(On_Player.orig_InternalSavePlayerFile orig, PlayerFileData fileData)
     {
-        // TODO 如果原生支持获取PLR就更好了,不然新版本可能因为存档结构变动寄寄.
-        // TODO 缓存机制
+        // 不属于原版的内容,没法使用TerraHook,但是依旧不会对此接口造成破坏,庆幸.
         if (fileData.ServerSideCharacter && fileData.Path.EndsWith("SSC"))
         {
-            var plr = GetPLR(fileData);
-            var tplr = GetTPLR(fileData);
+            try
+            {
+                var plr = GetPLR(fileData);
+                var tplr = GetTPLR(fileData);
 
-            var mp = Mod.GetPacket();
-            mp.Write((byte)MessageID.SaveSSC);
-            mp.Write(SteamUser.GetSteamID().m_SteamID.ToString());
-            mp.Write(fileData.Player.name);
-            mp.Write(plr.Length);
-            mp.Write(plr);
-            TagIO.Write(tplr, mp);
-            mp.Write(fileData.Path == "Create.SSC");
-            MessageManager.FrameSend(mp);
+                var mp = Mod.GetPacket();
+                mp.Write((byte)MessageID.SaveSSC);
+                mp.Write(SteamUser.GetSteamID().m_SteamID.ToString());
+                mp.Write(fileData.Player.name);
+                mp.Write(plr.Length);
+                mp.Write(plr);
+                TagIO.Write(tplr, mp);
+                mp.Write(fileData.Path == "Create.SSC");
+                MessageManager.FrameSend(mp);
+            }
+            catch (Exception e)
+            {
+                Mod.Logger.Error(e);
+            }
 
             return;
         }
@@ -194,7 +201,8 @@ public class HookManager : ModSystem
         var rijndaelManaged = new RijndaelManaged();
         using (var stream = new MemoryStream(2000))
         {
-            using (var output = new CryptoStream(stream, rijndaelManaged.CreateEncryptor(ENC_KEY, ENC_KEY), CryptoStreamMode.Write))
+            using (var output = new CryptoStream(stream, rijndaelManaged.CreateEncryptor(ENC_KEY, ENC_KEY),
+                       CryptoStreamMode.Write))
             {
                 using (var binaryWriter = new BinaryWriter(output))
                 {
@@ -214,7 +222,9 @@ public class HookManager : ModSystem
 
     TagCompound GetTPLR(PlayerFileData fileData)
     {
-        var SaveData = Assembly.Load("tModLoader").GetType("Terraria.ModLoader.IO.PlayerIO")!.GetMethod("SaveData", (BindingFlags)40);
+        var SaveData =
+            Assembly.Load("tModLoader").GetType("Terraria.ModLoader.IO.PlayerIO")!.GetMethod("SaveData",
+                (BindingFlags)40);
         return (TagCompound)SaveData!.Invoke(null, new object[] { fileData.Player });
     }
 
