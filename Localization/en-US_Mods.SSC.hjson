@@ -12,6 +12,15 @@ Configs: {
 				'''
 		}
 
+		ShowSavedMassage: {
+			Label: Show Save-Successful Massage
+			Tooltip: 
+				'''
+				Show a massage when successfully saved.
+				Show nothing if disabled, suitable for a frequent auto-saving.
+				'''
+		}
+
 		Save4World: {
 			Label: Save For World
 			Tooltip:

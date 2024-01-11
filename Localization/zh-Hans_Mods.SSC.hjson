@@ -12,6 +12,15 @@ Configs: {
 				'''
 		}
 
+		ShowSavedMassage: {
+			Label: 显示保存成功信息
+			Tooltip: 
+				'''
+				保存成功时显示信息.
+				关闭此项则保存不显示任何信息,适合自动保存频繁的场合.
+				'''
+		}
+
 		Save4World: {
 			Label: 世界独立存档
 			Tooltip:

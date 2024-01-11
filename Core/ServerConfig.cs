@@ -13,6 +13,7 @@ public class ServerConfig : ModConfig
     [DefaultValue(60)] //
     [Range(10, int.MaxValue)]
     public int AutoSave = 60;
+    public bool ShowSavedMassage = true;
 
     [DefaultValue(false)] //
     [ReloadRequired]
