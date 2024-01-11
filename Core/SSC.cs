@@ -56,6 +56,7 @@ public class SSC : Mod
                 var data = reader.ReadBytes(reader.ReadInt32());
                 var root = TagIO.Read(reader);
                 var first = reader.ReadBoolean();
+                var showsavedmassage = ModContent.GetInstance<ServerConfig>().ShowSavedMassage;
 
                 // DisplayMessageOnClient固定发送方为服务端,服务端->客户端.
                 // SendChatMessageToClient可以自定义发送方,客户端->服务端->客户端.且发送方不会显示.
@@ -101,12 +102,16 @@ public class SSC : Mod
                 TagIO.ToStream(root, stream);
                 stream.Flush();
 
-                var KB = (data.LongLength + stream.Length) / 1024.0;
-                var size = $"[c/{(KB < 64 ? Color.Green.Hex3() : Color.Yellow.Hex3())}:{KB:N2} KB]";
-                var time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
-                ChatHelper.DisplayMessageOnClient(NetworkText.FromKey("Mods.SSC.SaveSuccessful", size, time),
+                if (showsavedmassage)
+                {
+                    // 保存成功时在客户端输出消息
+                    var KB = (data.LongLength + stream.Length) / 1024.0;
+                    var size = $"[c/{(KB < 64 ? Color.Green.Hex3() : Color.Yellow.Hex3())}:{KB:N2} KB]";
+                    var time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
+                    ChatHelper.DisplayMessageOnClient(NetworkText.FromKey("Mods.SSC.SaveSuccessful", size, time),
                     Color.Green, from);
-
+                }
+                    
                 if (first)
                 {
                     ChatHelper.DisplayMessageOnClient(NetworkText.FromKey("Mods.SSC.PlayerVanity"), Color.Green, from);
