@@ -89,6 +89,7 @@ public class SSC : Mod
                     // 保存时必须源文件存在,避免出现硬核回档的情况.
                     case false when !File.Exists(Path.Combine(PATH, MapID, id, $"{name}.plr")):
                     {
+                        ChatHelper.DisplayMessageOnClient(NetworkText.FromLiteral("保存失败，存档不存在！"), Color.Red, from);
                         return;
                     }
                 }
