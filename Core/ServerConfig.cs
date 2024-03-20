@@ -16,12 +16,15 @@ public class ServerConfig : ModConfig
 
     [DefaultValue(true)]
     public bool ShowSavedMassage = true;
-
+    
     [DefaultValue(false)] //
     [ReloadRequired]
     [BackgroundColor(255, 100, 100)]
     public bool Save4World = false;
 
+    [DefaultValue(false)]
+    public bool DontSaveWhenBossFight = false;
+    
     [DefaultListValue(1)] //
     [Expand(false)]
     public Dictionary<ItemDefinition, int> StartItems = new();

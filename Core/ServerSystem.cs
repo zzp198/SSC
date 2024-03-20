@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Threading.Tasks;
@@ -88,22 +87,34 @@ public class ServerSystem : ModSystem
 
     public override void PostUpdateEverything()
     {
-        if (Main.netMode != NetmodeID.MultiplayerClient || MarkSystem.AnyActiveDanger)
+        var serverConfig = ModContent.GetInstance<ServerConfig>();
+
+        if (Main.netMode != NetmodeID.MultiplayerClient)
         {
             return;
         }
 
-        var AutoSave = ModContent.GetInstance<ServerConfig>().AutoSave;
+        if (serverConfig.DontSaveWhenBossFight && MarkSystem.AnyActiveDanger)
+        {
+            return;
+        }
 
         Timer++;
-        if (Timer > AutoSave * 60)
+        if (Timer > serverConfig.AutoSave * 60)
         {
             Timer = 0;
-            if (SaveTask == null || SaveTask.Status != TaskStatus.Running)
+            if (SaveTask is not { Status: TaskStatus.Running })
             {
                 SaveTask = Task.Run(() => { InternalSave.Invoke(null, new object[] { Main.ActivePlayerFileData }); });
             }
         }
+    }
+
+    public override void PreSaveAndQuit()
+    {
+        base.PreSaveAndQuit();
+        // 在游戏退出前保存一次
+        InternalSave.Invoke(null, new object[] { Main.ActivePlayerFileData });
     }
 
     public override void Unload()

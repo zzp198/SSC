@@ -1,14 +1,26 @@
 [h1]SSC - Server Side Character[/h1]
 
-存档保存位置: [我的文档]\My Games\Terraria\tModLoader\SSC\(MapID)\[SteamID]\[Player]
-1. 纯数字文件夹为玩家存档,里面的角色可以在任何非独立世界使用.
-2. 带有“-”的文件夹为世界存档,里面的角色只有在世界独立存档启用时生效.
-3. 存档的保存形式为原版PLR文件,可以通过剪切粘贴的方式快速实现存档的转移.
+Just like TShock's SSC, when someone joins your server,
+Their inventory and statistical data will be cleared.
 
-[更新日志]
-2023.12.6
-船新版本,变动较大,注意设置的变更.
-已在最新预览版本测试可用,进入维护模式.
+The character is bound by its Steam ID, player name, and server world.
+
+World binding can be disabled in the configuration.
+
+The data is saved in native PLR file format, so it can be edited externally.
+
+[Update Log]
+添加设置界面退出时自动保存.
+Auto save when exiting game by setting.
+
+可选择BOSS战期间是否保存.
+Can choose whether to save during the boss battle.
+
+[Setting]
+存档保存位置: [我的文档]\My Games\Terraria\tModLoader\SSC\(MapID)\[SteamID]\[Player]
+1. 纯数字文件夹(Player ID)为玩家存档,里面的角色可以在任何非独立世界使用.
+2. 带有“-”的文件夹为世界存档(World ID),里面的角色只有在世界独立存档启用时生效.
+3. 存档的保存形式为原版PLR文件,可以通过剪切粘贴的方式快速实现存档的转移.
 
 [Github]
 新版本测试不全,可能会遇到奇怪的问题,查明后请反馈.

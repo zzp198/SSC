@@ -14,7 +14,7 @@ Configs: {
 
 		ShowSavedMassage: {
 			Label: 显示保存成功信息
-			Tooltip: 
+			Tooltip:
 				'''
 				保存成功时显示信息.
 				关闭此项则保存不显示任何信息,适合自动保存频繁的场合.
@@ -38,6 +38,11 @@ Configs: {
 		Password: {
 			Label: 密码校验
 			Tooltip: 在控制台使用"AdminCode"指令查看
+		}
+
+		DontSaveWhenBossFight: {
+			Label: BOSS战期间暂停保存
+			Tooltip: ""
 		}
 	}
 }

@@ -14,7 +14,7 @@ Configs: {
 
 		ShowSavedMassage: {
 			Label: Show Save-Successful Massage
-			Tooltip: 
+			Tooltip:
 				'''
 				Show a massage when successfully saved.
 				Show nothing if disabled, suitable for a frequent auto-saving.
@@ -39,6 +39,11 @@ Configs: {
 		Password: {
 			Label: Password
 			Tooltip: Using the "AdminCode" command on the console.
+		}
+
+		DontSaveWhenBossFight: {
+			Label: Dont Save When Boss Fight
+			Tooltip: ""
 		}
 	}
 }
