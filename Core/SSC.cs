@@ -26,7 +26,6 @@ public class SSC : Mod
     public override void Load()
     {
         Main.SettingsUnlock_WorldEvil = true; // 解锁自选腐化猩红
-        Main.runningCollectorsEdition = true; // 白嫖一只小兔子
     }
 
     public override void PostSetupContent()
@@ -110,9 +109,9 @@ public class SSC : Mod
                     var size = $"[c/{(KB < 64 ? Color.Green.Hex3() : Color.Yellow.Hex3())}:{KB:N2} KB]";
                     var time = DateTime.Now.ToString("yyyy-MM-dd HH:mm:ss");
                     ChatHelper.DisplayMessageOnClient(NetworkText.FromKey("Mods.SSC.SaveSuccessful", size, time),
-                    Color.Green, from);
+                        Color.Green, from);
                 }
-                    
+
                 if (first)
                 {
                     ChatHelper.DisplayMessageOnClient(NetworkText.FromKey("Mods.SSC.PlayerVanity"), Color.Green, from);
@@ -185,11 +184,14 @@ public class SSC : Mod
                     TagIO.ToStream(root, memoryStream);
 
                     // 需要修改file_data的Path为SSC以开启云存档,同时注意继承PlayTime,否则新档会丢失游玩时间.
-                    var file_data = new PlayerFileData(Path.Combine(Main.PlayerPath, $"{SteamUser.GetSteamID().m_SteamID}.SSC"), false)
+                    var file_data =
+                        new PlayerFileData(Path.Combine(Main.PlayerPath, $"{SteamUser.GetSteamID().m_SteamID}.SSC"),
+                            false)
                         {
                             Metadata = FileMetadata.FromCurrentSettings(FileType.Player),
                         };
-                    Player.LoadPlayerFromStream(file_data, data, memoryStream.ToArray());// data中包含playtime并且会添加到file_data里
+                    Player.LoadPlayerFromStream(file_data, data,
+                        memoryStream.ToArray()); // data中包含playtime并且会添加到file_data里
                     file_data.MarkAsServerSide();
                     file_data.SetAsActive();
 
