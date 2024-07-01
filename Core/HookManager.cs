@@ -117,14 +117,23 @@ public class HookManager : ModSystem
             i => i.MatchCall(typeof(SystemLoader), nameof(SystemLoader.ModifyInterfaceLayers)));
         cur.EmitDelegate<Func<List<GameInterfaceLayer>, List<GameInterfaceLayer>>>(layers =>
         {
+            // 原先是禁用,现在开创一个新的List,不修改原本的数据.
             if (ModContent.GetInstance<ServerSystem>().UI?.CurrentState != null)
             {
-                layers.ForEach(layer => layer.Active = layer.Name switch
+                var showLayers = new List<GameInterfaceLayer>();
+                foreach (var t in layers)
                 {
-                    "Vanilla: Map / Minimap" => false,
-                    "Vanilla: Resource Bars" => false,
-                    _ => layer.Name.StartsWith("Vanilla:")
-                });
+                    // 只显示原版部分UI
+                    if (t.Name.StartsWith("Vanilla:"))
+                    {
+                        if (t.Name != "Vanilla: Map / Minimap" && t.Name != "Vanilla: Resource Bars")
+                        {
+                            showLayers.Add(t);
+                        }
+                    }
+                }
+
+                return showLayers;
             }
 
             return layers;

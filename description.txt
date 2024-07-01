@@ -10,14 +10,10 @@ World binding can be disabled in the configuration.
 The data is saved in native PLR file format, so it can be edited externally.
 
 [Update Log]
-添加设置界面退出时自动保存.
-Auto save when exiting game by setting.
-
-可选择BOSS战期间是否保存.
-Can choose whether to save during the boss battle.
+允许非Steam玩家使用此mod,但是,代价时什么呢?
 
 [Setting]
-存档保存位置: [我的文档]\My Games\Terraria\tModLoader\SSC\(MapID)\[SteamID]\[Player]
+存档保存位置: [我的文档]\My Games\Terraria\tModLoader\SSC\([MapID])\[SteamID]\[Player]
 1. 纯数字文件夹(Player ID)为玩家存档,里面的角色可以在任何非独立世界使用.
 2. 带有“-”的文件夹为世界存档(World ID),里面的角色只有在世界独立存档启用时生效.
 3. 存档的保存形式为原版PLR文件,可以通过剪切粘贴的方式快速实现存档的转移.
