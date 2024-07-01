@@ -87,13 +87,13 @@ public class HookManager : ModSystem
             }
 
             // UUID会影响本地的map数据,同一个UUID的不同角色会拥有相同的地图探索
-            var m_SteamID = SteamUser.GetSteamID().m_SteamID.ToString();
-            var fileData = new PlayerFileData(Path.Combine(Main.PlayerPath, $"{m_SteamID}.plr"), false)
+            var PID = SSC.GetPID();
+            var fileData = new PlayerFileData(Path.Combine(Main.PlayerPath, $"{PID}.plr"), false)
             {
                 Metadata = FileMetadata.FromCurrentSettings(FileType.Player),
                 Player = new Player
                 {
-                    name = m_SteamID, difficulty = game_mode,
+                    name = PID, difficulty = game_mode,
                     // MessageID -> StatLife:16  Ghost:13  Dead:12&16
                     statLife = 0, statMana = 0, dead = true, ghost = true,
                     // 避免因为进入世界的自动复活,导致客户端与服务端失去同步
@@ -184,7 +184,7 @@ public class HookManager : ModSystem
 
                 var mp = Mod.GetPacket();
                 mp.Write((byte)MessageID.SaveSSC);
-                mp.Write(SteamUser.GetSteamID().m_SteamID.ToString());
+                mp.Write(SSC.GetPID());
                 mp.Write(fileData.Player.name);
                 mp.Write(plr.Length);
                 mp.Write(plr);
@@ -219,7 +219,7 @@ public class HookManager : ModSystem
         {
             var mp = ModContent.GetInstance<SSC>().GetPacket();
             mp.Write((byte)MessageID.EraseSSC);
-            mp.Write(SteamUser.GetSteamID().m_SteamID.ToString());
+            mp.Write(SSC.GetPID());
             mp.Write(fileData.Player.name);
             mp.Send();
         }

@@ -210,14 +210,12 @@ public class SSC : Mod
                     TagIO.ToStream(root, memoryStream);
 
                     // 需要修改file_data的Path为SSC以开启云存档,同时注意继承PlayTime,否则新档会丢失游玩时间.
-                    var file_data =
-                        new PlayerFileData(Path.Combine(Main.PlayerPath, $"{SteamUser.GetSteamID().m_SteamID}.SSC"),
-                            false)
-                        {
-                            Metadata = FileMetadata.FromCurrentSettings(FileType.Player),
-                        };
-                    Player.LoadPlayerFromStream(file_data, data,
-                        memoryStream.ToArray()); // data中包含playtime并且会添加到file_data里
+                    var file_data = new PlayerFileData(Path.Combine(Main.PlayerPath, $"{GetPID()}.SSC"), false)
+                    {
+                        Metadata = FileMetadata.FromCurrentSettings(FileType.Player),
+                    };
+                    // data中包含playtime并且会添加到file_data里
+                    Player.LoadPlayerFromStream(file_data, data, memoryStream.ToArray());
                     file_data.MarkAsServerSide();
                     file_data.SetAsActive();
 

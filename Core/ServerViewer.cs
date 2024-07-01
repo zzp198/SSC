@@ -155,7 +155,9 @@ public class ServerViewer : UIState
 
             Character.name = Dummy.name;
             Character.difficulty = Dummy.difficulty;
-            var invoke = typeof(UICharacterCreation).GetMethod("SetupPlayerStatsAndInventoryBasedOnDifficulty", (BindingFlags)36);
+            var invoke =
+                typeof(UICharacterCreation).GetMethod("SetupPlayerStatsAndInventoryBasedOnDifficulty",
+                    (BindingFlags)36);
             invoke?.Invoke(CharacterCreation, Array.Empty<object>());
 
             var data = new PlayerFileData("Create.SSC", false)
@@ -164,7 +166,8 @@ public class ServerViewer : UIState
             };
             data.MarkAsServerSide();
 
-            var SavePlayer = typeof(Player).GetMethod("InternalSavePlayerFile", BindingFlags.NonPublic | BindingFlags.Static);
+            var SavePlayer =
+                typeof(Player).GetMethod("InternalSavePlayerFile", BindingFlags.NonPublic | BindingFlags.Static);
             FileUtilities.ProtectedInvoke(() => SavePlayer?.Invoke(null, new object[] { data }));
 
             NameSearchBar.SetContents("");
@@ -199,7 +202,7 @@ public class ServerViewer : UIState
     public void Calc(TagCompound obj)
     {
         CharacterGrid.Clear();
-        foreach (var tag in obj.Get<List<TagCompound>>(SteamUser.GetSteamID().m_SteamID.ToString()))
+        foreach (var tag in obj.Get<List<TagCompound>>(SSC.GetPID()))
         {
             var item = new UIPanel
             {
@@ -254,7 +257,7 @@ public class ServerViewer : UIState
             {
                 var mp = ModContent.GetInstance<SSC>().GetPacket();
                 mp.Write((byte)MessageID.GoGoSSC);
-                mp.Write(SteamUser.GetSteamID().m_SteamID.ToString());
+                mp.Write(SSC.GetPID());
                 mp.Write(tag.GetString("name"));
                 mp.Send();
             };
@@ -275,7 +278,7 @@ public class ServerViewer : UIState
             {
                 var mp = ModContent.GetInstance<SSC>().GetPacket();
                 mp.Write((byte)MessageID.EraseSSC);
-                mp.Write(SteamUser.GetSteamID().m_SteamID.ToString());
+                mp.Write(SSC.GetPID());
                 mp.Write(tag.Get<string>("name"));
                 mp.Send();
             };
