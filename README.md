@@ -1,7 +1,7 @@
 ﻿Just like TShock's SSC, when someone joins your server,
 Their inventory and statistical data will be cleared.
 
-The character is bound by its Steam ID, player name, and server world.
+The character is bound by its Steam ID/UUID, player name, and server world.
 
 World binding can be disabled in the configuration.
 
