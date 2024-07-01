@@ -57,3 +57,4 @@ PlayerVanity: 角色默认使用经典造型, 后续你可以在理发师或梳�
 SaveSuccessful: 保存成功({0}). {1}.
 EraseSuccessful: 删除成功.
 RightDoubleClick: 右键双击!
+SteamIDWrong: 获取SteamID错误,将使用UUID,注意,这可能会在你删除游戏,更换电脑时更改从而失去存档所有权.

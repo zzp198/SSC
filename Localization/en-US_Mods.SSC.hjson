@@ -58,3 +58,4 @@ PlayerVanity: The character defaults to classic styling, and you can customize i
 SaveSuccessful: Successfully saved({0}). {1}.
 EraseSuccessful: Successfully deleted.
 RightDoubleClick: Right-double-click!
+SteamIDWrong: Error in obtaining SteamID, using UUID. Please note that this may change when you delete the game or change your computer, resulting in loss of archive ownership

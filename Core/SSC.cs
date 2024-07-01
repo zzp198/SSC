@@ -35,6 +35,9 @@ public class SSC : Mod
             }
             catch (Exception e)
             {
+                ChatHelper.DisplayMessageOnClient(NetworkText.FromLiteral(e.ToString()), Color.Red, Main.myPlayer);
+                ChatHelper.DisplayMessageOnClient(NetworkText.FromKey("Mods.SSC.SteamIDWrong"), Color.Red,
+                    Main.myPlayer);
                 CachedPID = Main.clientUUID;
             }
         }

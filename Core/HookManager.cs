@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
@@ -9,6 +10,7 @@ using Terraria.ID;
 using Terraria.IO;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
+using Terraria.UI;
 using Terraria.Utilities;
 
 namespace SSC.Core;
@@ -20,6 +22,7 @@ public class HookManager : ModSystem
         IL_MessageBuffer.GetData += ILHook0;
         IL_NetMessage.SendData += ILHook1;
         IL_MessageBuffer.GetData += ILHook2;
+        // IL_Main.DrawInterface += ILHook3;
         On_FileUtilities.Exists += OnHook1;
         On_FileUtilities.ReadAllBytes += OnHook2;
         On_Player.InternalSavePlayerFile += OnHook3;
@@ -104,6 +107,35 @@ public class HookManager : ModSystem
             ModContent.GetInstance<ServerSystem>().UI?.SetState(new ServerViewer()); // 唯一设置界面的地方
         });
     }
+
+    // SSC界面下禁止其他MOD的界面和操作
+    // 存在其他mod的界面屏蔽后再也不显示的bug,目前没发现绕过,先暂时取消这个功能
+    // void ILHook3(ILContext il)
+    // {
+    //     var cur = new ILCursor(il);
+    //     cur.GotoNext(MoveType.After,
+    //         i => i.MatchCall(typeof(SystemLoader), nameof(SystemLoader.ModifyInterfaceLayers)));
+    //     cur.EmitDelegate<Func<List<GameInterfaceLayer>, List<GameInterfaceLayer>>>(layers =>
+    //     {
+    //         // layers是_gameInterfaceLayers的副本,但并不是深拷贝?
+    //         if (ModContent.GetInstance<ServerSystem>().UI?.CurrentState != null)
+    //         {
+    //             for (var i = 0; i < layers.Count; i++)
+    //             {
+    //                 if (layers[i].Name == "Vanilla: Map / Minimap" && layers[i].Name != "Vanilla: Resource Bars")
+    //                 {
+    //                     layers[i].Active = false;
+    //                 }
+    //                 else
+    //                 {
+    //                     layers[i].Active = layers[i].Name.StartsWith("Vanilla:");
+    //                 }
+    //             }
+    //         }
+    //
+    //         return layers;
+    //     });
+    // }
 
     // 放行特定的数据格式
     bool OnHook1(On_FileUtilities.orig_Exists orig, string path, bool cloud)
