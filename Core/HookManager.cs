@@ -2,7 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
-using System.Security.Cryptography;
 using System.Text.RegularExpressions;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;

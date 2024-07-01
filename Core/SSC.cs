@@ -23,6 +23,25 @@ public class SSC : Mod
 
     public static string Password = "";
 
+    public static string CachedPID = "";
+
+    public static string GetPID()
+    {
+        if (CachedPID == "")
+        {
+            try
+            {
+                CachedPID = SteamUser.GetSteamID().m_SteamID.ToString();
+            }
+            catch (Exception e)
+            {
+                CachedPID = Main.clientUUID;
+            }
+        }
+
+        return CachedPID;
+    }
+
     public override void Load()
     {
         Main.SettingsUnlock_WorldEvil = true; // 解锁自选腐化猩红
