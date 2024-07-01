@@ -8,6 +8,7 @@ using Mono.Cecil.Cil;
 using MonoMod.Cil;
 using Steamworks;
 using Terraria;
+using Terraria.ID;
 using Terraria.IO;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
@@ -174,7 +175,8 @@ public class HookManager : ModSystem
     void OnHook3(On_Player.orig_InternalSavePlayerFile orig, PlayerFileData fileData)
     {
         // 不属于原版的内容,没法使用TerraHook,但是依旧不会对此接口造成破坏,庆幸.
-        if (fileData.ServerSideCharacter && fileData.Path.EndsWith("SSC"))
+        if (Main.netMode == NetmodeID.MultiplayerClient &&
+            fileData.ServerSideCharacter && fileData.Path.EndsWith("SSC"))
         {
             try
             {
