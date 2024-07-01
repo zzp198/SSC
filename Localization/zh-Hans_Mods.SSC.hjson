@@ -47,7 +47,7 @@ Configs: {
 
 		DontReviveWhenBossFight: {
 			Label: BOSS战期间禁止复活
-			Tooltip: "BOSS战期间,新进来的角色无法登录."
+			Tooltip: BOSS战期间,新进来的角色无法登录.
 		}
 	}
 }

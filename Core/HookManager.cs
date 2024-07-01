@@ -1,17 +1,14 @@
 ﻿using System;
-using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
 using System.Text.RegularExpressions;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
-using Steamworks;
 using Terraria;
 using Terraria.ID;
 using Terraria.IO;
 using Terraria.ModLoader;
 using Terraria.ModLoader.IO;
-using Terraria.UI;
 using Terraria.Utilities;
 
 namespace SSC.Core;
@@ -23,7 +20,6 @@ public class HookManager : ModSystem
         IL_MessageBuffer.GetData += ILHook0;
         IL_NetMessage.SendData += ILHook1;
         IL_MessageBuffer.GetData += ILHook2;
-        IL_Main.DrawInterface += ILHook3;
         On_FileUtilities.Exists += OnHook1;
         On_FileUtilities.ReadAllBytes += OnHook2;
         On_Player.InternalSavePlayerFile += OnHook3;
@@ -106,37 +102,6 @@ public class HookManager : ModSystem
             fileData.SetAsActive();
 
             ModContent.GetInstance<ServerSystem>().UI?.SetState(new ServerViewer()); // 唯一设置界面的地方
-        });
-    }
-
-    // SSC界面下禁止其他MOD的界面和操作
-    void ILHook3(ILContext il)
-    {
-        var cur = new ILCursor(il);
-        cur.GotoNext(MoveType.After,
-            i => i.MatchCall(typeof(SystemLoader), nameof(SystemLoader.ModifyInterfaceLayers)));
-        cur.EmitDelegate<Func<List<GameInterfaceLayer>, List<GameInterfaceLayer>>>(layers =>
-        {
-            // 原先是禁用,现在开创一个新的List,不修改原本的数据.
-            if (ModContent.GetInstance<ServerSystem>().UI?.CurrentState != null)
-            {
-                var showLayers = new List<GameInterfaceLayer>();
-                foreach (var t in layers)
-                {
-                    // 只显示原版部分UI
-                    if (t.Name.StartsWith("Vanilla:"))
-                    {
-                        if (t.Name != "Vanilla: Map / Minimap" && t.Name != "Vanilla: Resource Bars")
-                        {
-                            showLayers.Add(t);
-                        }
-                    }
-                }
-
-                return showLayers;
-            }
-
-            return layers;
         });
     }
 
