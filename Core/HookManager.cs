@@ -180,7 +180,7 @@ public class HookManager : ModSystem
         {
             try
             {
-                var plr = GetPLR(fileData);
+                var plr = Player.SavePlayerFile_Vanilla(fileData);
                 var tplr = GetTPLR(fileData);
 
                 var mp = Mod.GetPacket();
@@ -202,33 +202,6 @@ public class HookManager : ModSystem
         }
 
         orig(fileData);
-    }
-
-    byte[] ENC_KEY = (byte[])typeof(Player).GetField("ENCRYPTION_KEY", (BindingFlags)40)!.GetValue(null);
-    MethodInfo PlayerSerialize = typeof(Player).GetMethod("Serialize", (BindingFlags)40);
-
-    byte[] GetPLR(PlayerFileData fileData)
-    {
-        var rijndaelManaged = new RijndaelManaged();
-        using (var stream = new MemoryStream(2000))
-        {
-            using (var output = new CryptoStream(stream, rijndaelManaged.CreateEncryptor(ENC_KEY, ENC_KEY),
-                       CryptoStreamMode.Write))
-            {
-                using (var binaryWriter = new BinaryWriter(output))
-                {
-                    PlayerLoader.PreSavePlayer(fileData.Player);
-                    binaryWriter.Write(279);
-                    fileData.Metadata.Write(binaryWriter);
-                    PlayerSerialize.Invoke(null, new object[] { fileData, fileData.Player, binaryWriter });
-                    binaryWriter.Flush();
-                    output.FlushFinalBlock();
-                    stream.Flush();
-                    PlayerLoader.PostSavePlayer(fileData.Player);
-                    return stream.ToArray();
-                }
-            }
-        }
     }
 
     TagCompound GetTPLR(PlayerFileData fileData)
