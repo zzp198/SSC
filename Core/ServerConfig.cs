@@ -25,6 +25,9 @@ public class ServerConfig : ModConfig
     [DefaultValue(false)]
     public bool DontSaveWhenBossFight = false;
     
+    [DefaultValue(false)]
+    public bool DontReviveWhenBossFight = false;
+    
     [DefaultListValue(1)] //
     [Expand(false)]
     public Dictionary<ItemDefinition, int> StartItems = new();

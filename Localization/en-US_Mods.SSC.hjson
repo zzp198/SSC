@@ -45,6 +45,11 @@ Configs: {
 			Label: Dont Save When Boss Fight
 			Tooltip: ""
 		}
+
+		DontReviveWhenBossFight: {
+			Label: Dont Revive When Boss Fight
+			Tooltip: ""
+		}
 	}
 }
 

@@ -128,6 +128,13 @@ public class SSC : Mod
                     var id = reader.ReadString();
                     var name = reader.ReadString();
 
+                    if (ModContent.GetInstance<ServerConfig>().DontReviveWhenBossFight && MarkSystem.AnyActiveDanger)
+                    {
+                        ChatHelper.DisplayMessageOnClient(NetworkText.FromKey("Mods.SSC.DontReviveWhenBossFight"),
+                            Color.Red, from);
+                        return;
+                    }
+
                     if (Netplay.Clients.Where(c => c.IsActive).Any(c => Main.player[c.Id].name == name)) // 防止同名在线
                     {
                         ChatHelper.DisplayMessageOnClient(NetworkText.FromKey(Lang.mp[5].Key, name), Color.Red, from);
