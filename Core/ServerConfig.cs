@@ -14,25 +14,27 @@ public class ServerConfig : ModConfig
     [Range(10, int.MaxValue)]
     public int AutoSave = 60;
 
-    [DefaultValue(true)]
-    public bool ShowSavedMassage = true;
-    
+    [DefaultValue(true)] public bool ShowSavedMassage = true;
+
     [DefaultValue(false)] //
     [ReloadRequired]
     [BackgroundColor(255, 100, 100)]
     public bool Save4World = false;
 
-    [DefaultValue(false)]
-    public bool DontSaveWhenBossFight = false;
-    
-    [DefaultValue(false)]
-    public bool DontReviveWhenBossFight = false;
-    
+    [DefaultValue(false)] public bool DontSaveWhenBossFight = false;
+
+    [DefaultValue(false)] public bool DontReviveWhenBossFight = false;
+
     [DefaultListValue(1)] //
     [Expand(false)]
     public Dictionary<ItemDefinition, int> StartItems = new();
 
-    [DefaultValue("")] //
+    [DefaultValue(false)] //
+    public bool LimitClientMods = false;
+
+    [Expand(true)] //
+    public List<string> AllowedClientMods = [];
+
     public string Password = "";
 
     public override bool AcceptClientChanges(ModConfig obj, int whoAmI, ref NetworkText message)

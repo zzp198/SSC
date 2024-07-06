@@ -49,12 +49,22 @@ Configs: {
 			Label: BOSS战期间禁止复活
 			Tooltip: BOSS战期间,新进来的角色无法登录.
 		}
+
+		AllowedClientMods: {
+			Label: 本地模组白名单
+			Tooltip: 仅在限制本地模组启用时生效,除了在服务端启用的本地模组允许外,这里可以额外添加.
+		}
+
+		LimitClientMods: {
+			Label: 限制本地模组
+			Tooltip: 开启后可以防止别人启用一些奇奇怪怪的本地模组
+		}
 	}
 }
 
 NameError: 用户名无效, 请不要添加一些奇怪的字符.
-PlayerVanity: 角色默认使用经典造型, 后续你可以在理发师或梳妆台进行自定义.
 SaveSuccessful: 保存成功({0}). {1}.
 EraseSuccessful: 删除成功.
 RightDoubleClick: 右键双击!
 SteamIDWrong: 获取SteamID错误,将使用UUID,注意,这可能会在你删除游戏,更换电脑时更改从而失去存档所有权.
+IClientMod: 启用了非法本地模组 {0} , 请自行关闭或联系服主放行.

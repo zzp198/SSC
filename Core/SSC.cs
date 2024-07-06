@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using Microsoft.Xna.Framework;
@@ -136,7 +137,6 @@ public class SSC : Mod
 
                 if (first)
                 {
-                    ChatHelper.DisplayMessageOnClient(NetworkText.FromKey("Mods.SSC.PlayerVanity"), Color.Green, from);
                     NetMessage.TrySendData(Terraria.ID.MessageID.WorldData, from);
                 }
 
@@ -257,6 +257,32 @@ public class SSC : Mod
                 NetMessage.TrySendData(Terraria.ID.MessageID.WorldData, from);
                 break;
             }
+            case MessageID.ClientModCheck:
+            {
+                List<string> AllowedClientMods = [];
+                AllowedClientMods.AddRange(from mod in ModLoader.Mods where mod.Side == ModSide.Client select mod.Name);
+                AllowedClientMods.AddRange(ModContent.GetInstance<ServerConfig>().AllowedClientMods);
+
+                List<string> IClientModes = [];
+
+                var num = reader.ReadInt32();
+                for (var i = 0; i < num; i++)
+                {
+                    var name = reader.ReadString();
+                    if (!AllowedClientMods.Contains(name))
+                    {
+                        IClientModes.Add(name);
+                    }
+                }
+
+                if (IClientModes.Count > 0)
+                {
+                    var names = string.Join(", ", IClientModes);
+                    NetMessage.BootPlayer(from, NetworkText.FromKey("Mods.SSC.IClientMod", names));
+                }
+
+                break;
+            }
             default:
             {
                 switch (Main.netMode)
@@ -286,4 +312,6 @@ public enum MessageID : byte
     GoGoSSC, // 客户端->服务端,id,name.服务端->客户端,data,root.
 
     EraseSSC, // 客户端->服务端,id,name
+
+    ClientModCheck, // 客户端->服务端,num,name
 }

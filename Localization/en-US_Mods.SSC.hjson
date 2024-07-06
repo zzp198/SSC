@@ -50,12 +50,22 @@ Configs: {
 			Label: Dont Revive When Boss Fight
 			Tooltip: ""
 		}
+
+		AllowedClientMods: {
+			Label: Allowed Client Mods
+			Tooltip: Only effective when Limit Client Mods, in addition to allowing local mods enabled on the server, additional additions can be made here
+		}
+
+		LimitClientMods: {
+			Label: Limit Client Mods
+			Tooltip: Enabling it can prevent others from enabling some strange local mods.
+		}
 	}
 }
 
 NameError: The username is invalid, please do not add any strange chars.
-PlayerVanity: The character defaults to classic styling, and you can customize it later on at the hairdresser or dressing table.
 SaveSuccessful: Successfully saved({0}). {1}.
 EraseSuccessful: Successfully deleted.
 RightDoubleClick: Right-double-click!
 SteamIDWrong: Error in obtaining SteamID, using UUID. Please note that this may change when you delete the game or change your computer, resulting in loss of archive ownership
+IClientMod: Illegal local mod {0} has been enabled. Please close it yourself or contact the server owner to release it.
