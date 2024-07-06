@@ -17,6 +17,8 @@ namespace SSC.Core;
 
 public class HookManager : ModSystem
 {
+    public static Player JoinPlayer;
+
     public override void Load()
     {
         IL_MessageBuffer.GetData += ILHook0;
@@ -84,6 +86,10 @@ public class HookManager : ModSystem
             {
                 return; // 通过hook上面的条件可实现仅在每次初次进入世界时初始化
             }
+
+            // JoinPlayer = Main.ActivePlayerFileData.Player.SerializedClone();
+
+            JoinPlayer = (Player)Main.ActivePlayerFileData.Player.Clone();
 
             // UUID会影响本地的map数据,同一个UUID的不同角色会拥有相同的地图探索
             var PID = SSC.GetPID();

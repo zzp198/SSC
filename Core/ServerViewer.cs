@@ -155,10 +155,20 @@ public class ServerViewer : UIState
 
             Character.name = Dummy.name;
             Character.difficulty = Dummy.difficulty;
-            var invoke =
-                typeof(UICharacterCreation).GetMethod("SetupPlayerStatsAndInventoryBasedOnDifficulty",
-                    (BindingFlags)36);
+            var invoke_name = "SetupPlayerStatsAndInventoryBasedOnDifficulty";
+            var invoke = typeof(UICharacterCreation).GetMethod(invoke_name, (BindingFlags)36);
             invoke?.Invoke(CharacterCreation, Array.Empty<object>());
+
+            // from Player.CopyVisuals
+            Character.skinVariant = HookManager.JoinPlayer.skinVariant;
+            Character.skinColor = HookManager.JoinPlayer.skinColor;
+            Character.eyeColor = HookManager.JoinPlayer.eyeColor;
+            Character.hair = HookManager.JoinPlayer.hair;
+            Character.hairColor = HookManager.JoinPlayer.hairColor;
+            Character.shirtColor = HookManager.JoinPlayer.shirtColor;
+            Character.underShirtColor = HookManager.JoinPlayer.underShirtColor;
+            Character.pantsColor = HookManager.JoinPlayer.pantsColor;
+            Character.shoeColor = HookManager.JoinPlayer.shoeColor;
 
             var data = new PlayerFileData("Create.SSC", false)
             {
@@ -166,9 +176,8 @@ public class ServerViewer : UIState
             };
             data.MarkAsServerSide();
 
-            var SavePlayer =
-                typeof(Player).GetMethod("InternalSavePlayerFile", BindingFlags.NonPublic | BindingFlags.Static);
-            FileUtilities.ProtectedInvoke(() => SavePlayer?.Invoke(null, new object[] { data }));
+            var SavePlayer = typeof(Player).GetMethod("InternalSavePlayerFile", (BindingFlags)40);
+            FileUtilities.ProtectedInvoke(() => SavePlayer?.Invoke(null, [data]));
 
             NameSearchBar.SetContents("");
             Dummy.difficulty = PlayerDifficultyID.SoftCore;

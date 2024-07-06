@@ -10,6 +10,8 @@ World binding can be disabled in the configuration.
 The data is saved in native PLR file format, so it can be edited externally.
 
 [Update Log]
+新角色在创建时会使用进入世界角色的外观.
+
 允许非Steam玩家使用此mod,但是,代价是什么呢?
 
 取消未登录时UI屏蔽,最大化兼容其他奇奇怪怪的MOD. 感谢 离音是狐不是喵w 提供反馈.
