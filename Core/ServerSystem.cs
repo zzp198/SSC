@@ -16,7 +16,8 @@ public class ServerSystem : ModSystem
     internal UserInterface UI;
     internal uint Timer;
     internal Task SaveTask;
-
+    public static int Count;
+    
     public override void Load()
     {
         if (!Main.dedServ)
@@ -87,6 +88,25 @@ public class ServerSystem : ModSystem
 
     public override void PostUpdateEverything()
     {
+        if (Main.LocalPlayer.ghost)
+        {
+            Count++;
+            if (Count > 60)
+            {
+                Count = 0;
+                
+                int floorX = Main.spawnTileX;
+                int floorY = Main.spawnTileY;
+                Main.LocalPlayer.Spawn_GetPositionAtWorldSpawn(ref floorX, ref floorY);
+                
+                var spawnPosition = new Vector2(floorX*16 ,floorY*16);
+                if (Vector2.Distance(Main.LocalPlayer.position,spawnPosition) > 50)
+                {
+                    Main.LocalPlayer.position =spawnPosition;
+                }
+            }
+        }
+        
         var serverConfig = ModContent.GetInstance<ServerConfig>();
 
         if (Main.netMode != NetmodeID.MultiplayerClient)

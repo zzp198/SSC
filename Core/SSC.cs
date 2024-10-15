@@ -150,6 +150,25 @@ public class SSC : Mod
                     var id = reader.ReadString();
                     var name = reader.ReadString();
 
+                    // 登录时也进行一次校验
+                    if (string.IsNullOrWhiteSpace(name))
+                    {
+                        ChatHelper.DisplayMessageOnClient(NetworkText.FromKey("Net.EmptyName"), Color.Red, from);
+                        return;
+                    }
+
+                    if (name.Length > 16) // SteamID是17位,这样他们永远不会和初始化的鬼魂角色名称相同.
+                    {
+                        ChatHelper.DisplayMessageOnClient(NetworkText.FromKey("Net.NameTooLong"), Color.Red, from);
+                        return;
+                    }
+
+                    if (name.IndexOfAny(Path.GetInvalidFileNameChars()) != -1)
+                    {
+                        ChatHelper.DisplayMessageOnClient(NetworkText.FromKey("Mods.SSC.NameError"), Color.Red, from);
+                        return;
+                    }
+                    
                     if (ModContent.GetInstance<ServerConfig>().DontReviveWhenBossFight && MarkSystem.AnyActiveDanger)
                     {
                         ChatHelper.DisplayMessageOnClient(NetworkText.FromKey("Mods.SSC.DontReviveWhenBossFight"),
