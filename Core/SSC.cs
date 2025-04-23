@@ -19,8 +19,7 @@ public class SSC : Mod
     // SSC/([MapID:xxx-x-xxx])/[SteamID:0-9]/zzp198.plr
     public static string PATH => Path.Combine(Main.SavePath, nameof(SSC));
 
-    public static string MapID =>
-        ModContent.GetInstance<ServerConfig>().Save4World ? $"{Main.ActiveWorldFileData.UniqueId}" : "";
+    public static string MapID => ModContent.GetInstance<ServerConfig>().Save4World ? $"{Main.ActiveWorldFileData.UniqueId}" : "";
 
     public static string Password = "";
 
@@ -324,7 +323,7 @@ public class SSC : Mod
 
 public enum MessageID : byte
 {
-    MessageSegment,
+    MessageSegment, // 超过65536的包进行分片传输
 
     SaveSSC, // 客户端->服务端,id,name,data,root,first
 
