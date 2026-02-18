@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Security.Cryptography;
+using System.Text;
 using Microsoft.Xna.Framework;
 using Steamworks;
 using Terraria;
@@ -19,7 +21,8 @@ public class SSC : Mod
     // SSC/([MapID:xxx-x-xxx])/[SteamID:0-9]/zzp198.plr
     public static string PATH => Path.Combine(Main.SavePath, nameof(SSC));
 
-    public static string MapID => ModContent.GetInstance<ServerConfig>().Save4World ? $"{Main.ActiveWorldFileData.UniqueId}" : "";
+    public static string MapID =>
+        ModContent.GetInstance<ServerConfig>().Save4World ? $"{Main.ActiveWorldFileData.UniqueId}" : "";
 
     public static string Password = "";
 
@@ -167,7 +170,7 @@ public class SSC : Mod
                         ChatHelper.DisplayMessageOnClient(NetworkText.FromKey("Mods.SSC.NameError"), Color.Red, from);
                         return;
                     }
-                    
+
                     if (ModContent.GetInstance<ServerConfig>().DontReviveWhenBossFight && MarkSystem.AnyActiveDanger)
                     {
                         ChatHelper.DisplayMessageOnClient(NetworkText.FromKey("Mods.SSC.DontReviveWhenBossFight"),

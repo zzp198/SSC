@@ -2,6 +2,8 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Reflection;
+using System.Security.Cryptography;
+using System.Text;
 using System.Text.RegularExpressions;
 using Mono.Cecil.Cil;
 using MonoMod.Cil;
@@ -98,9 +100,10 @@ public class HookManager : ModSystem
                 Metadata = FileMetadata.FromCurrentSettings(FileType.Player),
                 Player = new Player
                 {
-                    name = PID, difficulty = game_mode,
+                    // PID还是正常的SteamID或UUID，但是角色名不能按PID的长度来，进行一次压缩
+                    name = Convert.ToHexString(MD5.HashData(Encoding.UTF8.GetBytes(PID)))[..16],
                     // MessageID -> StatLife:16  Ghost:13  Dead:12&16
-                    statLife = 0, statMana = 0, dead = true, ghost = true,
+                    difficulty = game_mode, statLife = 0, statMana = 0, dead = true, ghost = true,
                     // 避免因为进入世界的自动复活,导致客户端与服务端失去同步
                     respawnTimer = int.MaxValue, lastTimePlayerWasSaved = long.MaxValue,
                     savedPerPlayerFieldsThatArentInThePlayerClass = new Player.SavedPlayerDataWithAnnoyingRules()
@@ -177,8 +180,8 @@ public class HookManager : ModSystem
     void OnHook3(On_Player.orig_InternalSavePlayerFile orig, PlayerFileData fileData)
     {
         // 不属于原版的内容,没法使用TerraHook,但是依旧不会对此接口造成破坏,庆幸.
-        if (Main.netMode == NetmodeID.MultiplayerClient &&
-            fileData.ServerSideCharacter && fileData.Path.EndsWith("SSC"))
+        if (Main.netMode == NetmodeID.MultiplayerClient && fileData.ServerSideCharacter &&
+            fileData.Path.EndsWith("SSC"))
         {
             try
             {
@@ -211,7 +214,7 @@ public class HookManager : ModSystem
         var SaveData =
             Assembly.Load("tModLoader").GetType("Terraria.ModLoader.IO.PlayerIO")!.GetMethod("SaveData",
                 (BindingFlags)40);
-        return (TagCompound)SaveData!.Invoke(null, new object[] { fileData.Player });
+        return (TagCompound)SaveData!.Invoke(null, [fileData.Player]);
     }
 
     // 硬核死亡删除云存档

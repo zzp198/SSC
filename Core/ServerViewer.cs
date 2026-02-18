@@ -157,7 +157,7 @@ public class ServerViewer : UIState
             Character.difficulty = Dummy.difficulty;
             var invoke_name = "SetupPlayerStatsAndInventoryBasedOnDifficulty";
             var invoke = typeof(UICharacterCreation).GetMethod(invoke_name, (BindingFlags)36);
-            invoke?.Invoke(CharacterCreation, Array.Empty<object>());
+            invoke?.Invoke(CharacterCreation, []);
 
             // from Player.CopyVisuals
             Character.skinVariant = HookManager.JoinPlayer.skinVariant;

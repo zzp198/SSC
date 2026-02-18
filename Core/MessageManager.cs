@@ -61,7 +61,7 @@ public class MessageManager : ModSystem
     {
         if (r.ReadBoolean())
         {
-            CachedMessageFrames[from] = Array.Empty<byte>();
+            CachedMessageFrames[from] = [];
             return;
         }
 

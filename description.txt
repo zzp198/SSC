@@ -10,6 +10,8 @@ World binding can be disabled in the configuration.
 The data is saved in native PLR file format, so it can be edited externally.
 
 [Update Log]
+2026.02.18 修复用户名过长的问题
+
 新角色在创建时会使用进入世界角色的外观.
 
 允许限制本地模组,防止玩家使用些不受控制的奇奇怪怪的本地模组.
