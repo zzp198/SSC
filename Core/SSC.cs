@@ -2,8 +2,6 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
-using System.Security.Cryptography;
-using System.Text;
 using Microsoft.Xna.Framework;
 using Steamworks;
 using Terraria;
@@ -38,10 +36,11 @@ public class SSC : Mod
             }
             catch (Exception e)
             {
+                // 用户名长度从16位变20位了，SteamID长度17位，只有UUID会超出限制需要截断
                 ChatHelper.DisplayMessageOnClient(NetworkText.FromLiteral(e.ToString()), Color.Red, Main.myPlayer);
                 ChatHelper.DisplayMessageOnClient(NetworkText.FromKey("Mods.SSC.SteamIDWrong"), Color.Red,
                     Main.myPlayer);
-                CachedPID = Main.clientUUID;
+                CachedPID = Main.clientUUID[..18];
             }
         }
 

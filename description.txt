@@ -10,7 +10,8 @@ World binding can be disabled in the configuration.
 The data is saved in native PLR file format, so it can be edited externally.
 
 [Update Log]
-2026.02.18 修复用户名过长的问题
+2026.02.19 修复用户名过长的问题，更新对Steam玩家无影响，对于依赖UUID的非Steam玩家会因为截断问题无法正常找到存档
+解决办法：新建角色，找到新角色的目录，把原本的plr文件拷贝过去即可。用户名长度最大20位，UUID只保留前18位。
 
 新角色在创建时会使用进入世界角色的外观.
 

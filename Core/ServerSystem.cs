@@ -17,7 +17,7 @@ public class ServerSystem : ModSystem
     internal uint Timer;
     internal Task SaveTask;
     public static int Count;
-    
+
     public override void Load()
     {
         if (!Main.dedServ)
@@ -59,14 +59,14 @@ public class ServerSystem : ModSystem
         // 当为SSC/时,会读取地图文件夹,但里面只有SteamID文件夹,没有PLR文件,所以无性能影响.
         Utils.TryCreatingDirectory(Path.Combine(SSC.PATH, SSC.MapID));
 
-        var users = new DirectoryInfo(Path.Combine(SSC.PATH, SSC.MapID)).GetDirectories(); // 获取一级子目录
-        foreach (var user in users)
+        var dirs = new DirectoryInfo(Path.Combine(SSC.PATH, SSC.MapID)).GetDirectories(); // 获取一级子目录
+        foreach (var dir in dirs)
         {
-            root.Set(user.Name, new List<TagCompound>());
-            foreach (var file_info in user.GetFiles("*.plr")) // 获取一级子文件
+            root.Set(dir.Name, new List<TagCompound>());
+            foreach (var file_info in dir.GetFiles("*.plr")) // 获取一级子文件
             {
                 var file_data = Player.LoadPlayer(file_info.FullName, false);
-                root.Get<List<TagCompound>>(user.Name).Add(new TagCompound
+                root.Get<List<TagCompound>>(dir.Name).Add(new TagCompound
                 {
                     { "name", file_data.Player.name },
                     { "game_mode", file_data.Player.difficulty },
@@ -94,19 +94,19 @@ public class ServerSystem : ModSystem
             if (Count > 60)
             {
                 Count = 0;
-                
+
                 int floorX = Main.spawnTileX;
                 int floorY = Main.spawnTileY;
                 Main.LocalPlayer.Spawn_GetPositionAtWorldSpawn(ref floorX, ref floorY);
-                
-                var spawnPosition = new Vector2(floorX*16 ,floorY*16);
-                if (Vector2.Distance(Main.LocalPlayer.position,spawnPosition) > 50)
+
+                var spawnPosition = new Vector2(floorX * 16, floorY * 16);
+                if (Vector2.Distance(Main.LocalPlayer.position, spawnPosition) > 50)
                 {
-                    Main.LocalPlayer.position =spawnPosition;
+                    Main.LocalPlayer.position = spawnPosition;
                 }
             }
         }
-        
+
         var serverConfig = ModContent.GetInstance<ServerConfig>();
 
         if (Main.netMode != NetmodeID.MultiplayerClient)
