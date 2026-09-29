@@ -59,6 +59,26 @@ Configs: {
 			Label: 限制本地模组
 			Tooltip: 开启后可以防止别人启用一些奇奇怪怪的本地模组
 		}
+
+		EnableJournal: {
+			Label: 启用旅行人物
+			Tooltip: 用来判断是否允许创建此难度的角色
+		}
+
+		EnableNormal: {
+			Label: 启用经典人物
+			Tooltip: 用来判断是否允许创建此难度的角色
+		}
+
+		EnableMiddle: {
+			Label: 启用中核人物
+			Tooltip: 用来判断是否允许创建此难度的角色
+		}
+
+		EnableHard: {
+			Label: 启用硬核人物
+			Tooltip: 用来判断是否允许创建此难度的角色
+		}
 	}
 }
 
