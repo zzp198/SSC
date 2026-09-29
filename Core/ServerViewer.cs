@@ -55,6 +55,7 @@ public class ServerViewer : UIState
         CharacterGrid.SetScrollbar(bar);
 
         Dummy = new Player();
+        Dummy.difficulty = byte.MaxValue;
 
         CharacterCreationPanel = new UIPanel
         {
@@ -99,36 +100,51 @@ public class ServerViewer : UIState
         NameSearchBar.OnContentsChanged += name => Dummy.name = name;
         CharacterCreationPanel.Append(NameSearchBar);
 
-        CharacterCreationPanel.Append(
-            new UIDifficultyButton(Dummy, Lang.menu[26], null, PlayerDifficultyID.SoftCore, Color.Cyan)
+        if (ModContent.GetInstance<ServerConfig>().EnableNormal)
+        {
+            CharacterCreationPanel.Append(
+                new UIDifficultyButton(Dummy, Lang.menu[26], null, PlayerDifficultyID.SoftCore, Color.Cyan)
+                {
+                    Width = new StyleDimension(-5, 0.5f),
+                    Height = new StyleDimension(26, 0),
+                    Top = new StyleDimension(50, 0)
+                });
+        }
+
+        if (ModContent.GetInstance<ServerConfig>().EnableMiddle)
+        {
+            CharacterCreationPanel.Append(
+                new UIDifficultyButton(Dummy, Lang.menu[25], null, PlayerDifficultyID.MediumCore, Main.mcColor)
+                {
+                    Width = new StyleDimension(-5, 0.5f),
+                    Height = new StyleDimension(26, 0),
+                    Top = new StyleDimension(50, 0),
+                    Left = new StyleDimension(5, 0.5f)
+                });
+        }
+
+        if (ModContent.GetInstance<ServerConfig>().EnableHard)
+        {
+            CharacterCreationPanel.Append(
+                new UIDifficultyButton(Dummy, Lang.menu[24], null, PlayerDifficultyID.Hardcore, Main.hcColor)
+                {
+                    Width = new StyleDimension(-5, 0.5f),
+                    Height = new StyleDimension(26, 0),
+                    Top = new StyleDimension(80, 0)
+                });
+        }
+
+        if (ModContent.GetInstance<ServerConfig>().EnableJournal)
+        {
+            CharacterCreationPanel.Append(new UIDifficultyButton(Dummy, Language.GetText("UI.Creative"), null,
+                PlayerDifficultyID.Creative, Main.creativeModeColor)
             {
                 Width = new StyleDimension(-5, 0.5f),
                 Height = new StyleDimension(26, 0),
-                Top = new StyleDimension(50, 0)
-            });
-        CharacterCreationPanel.Append(
-            new UIDifficultyButton(Dummy, Lang.menu[25], null, PlayerDifficultyID.MediumCore, Main.mcColor)
-            {
-                Width = new StyleDimension(-5, 0.5f),
-                Height = new StyleDimension(26, 0),
-                Top = new StyleDimension(50, 0),
+                Top = new StyleDimension(80, 0),
                 Left = new StyleDimension(5, 0.5f)
             });
-        CharacterCreationPanel.Append(
-            new UIDifficultyButton(Dummy, Lang.menu[24], null, PlayerDifficultyID.Hardcore, Main.hcColor)
-            {
-                Width = new StyleDimension(-5, 0.5f),
-                Height = new StyleDimension(26, 0),
-                Top = new StyleDimension(80, 0)
-            });
-        CharacterCreationPanel.Append(new UIDifficultyButton(Dummy, Language.GetText("UI.Creative"), null,
-            PlayerDifficultyID.Creative, Main.creativeModeColor)
-        {
-            Width = new StyleDimension(-5, 0.5f),
-            Height = new StyleDimension(26, 0),
-            Top = new StyleDimension(80, 0),
-            Left = new StyleDimension(5, 0.5f)
-        });
+        }
 
         CreateButton = new UITextPanel<LocalizedText>(Language.GetText("UI.Create"), 0.7f, true)
         {
@@ -149,6 +165,11 @@ public class ServerViewer : UIState
         };
         CreateButton.OnLeftClick += (_, _) =>
         {
+            if (Dummy.difficulty == byte.MaxValue) // 没有选择难度不允许创建
+            {
+                return;
+            }
+
             var Character = new Player();
             CharacterCreation = new UICharacterCreation(Character); // 注意会重置Player的难度
 
