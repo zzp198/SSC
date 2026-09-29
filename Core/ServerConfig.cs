@@ -1,4 +1,4 @@
-﻿using System.Collections.Generic;
+using System.Collections.Generic;
 using System.ComponentModel;
 using Terraria.Localization;
 using Terraria.ModLoader.Config;
@@ -36,6 +36,11 @@ public class ServerConfig : ModConfig
     public List<string> AllowedClientMods = [];
 
     public string Password = "";
+
+    [DefaultValue(true)] public bool EnableNormal;
+    [DefaultValue(true)] public bool EnableMiddle;
+    [DefaultValue(true)] public bool EnableHard;
+    [DefaultValue(true)] public bool EnableJournal;
 
     public override bool AcceptClientChanges(ModConfig obj, int whoAmI, ref NetworkText message)
     {
