@@ -60,6 +60,26 @@ Configs: {
 			Label: Limit Client Mods
 			Tooltip: Enabling it can prevent others from enabling some strange local mods.
 		}
+
+		EnableJournal: {
+			Label: Enable Journal
+			Tooltip: ""
+		}
+
+		EnableNormal: {
+			Label: Enable Normal
+			Tooltip: ""
+		}
+
+		EnableMiddle: {
+			Label: Enable Middle
+			Tooltip: ""
+		}
+
+		EnableHard: {
+			Label: Enable Hard
+			Tooltip: ""
+		}
 	}
 }
 
